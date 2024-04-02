@@ -1,5 +1,6 @@
 package pieces;
 
+import game.Board;
 import game.Square;
 
 import javax.imageio.ImageIO;
@@ -13,9 +14,11 @@ public abstract class Piece {
     public BufferedImage image;
     public int x,y;
     public int col,row,preCol,preRow;
+    Board board;
 
 
-    public Piece(boolean isWhite, int col, int row) {
+    public Piece(Board board, boolean isWhite, int col, int row) {
+        this.board=board;
         this.isWhite = isWhite;
         this.col = col;
         this.row = row;

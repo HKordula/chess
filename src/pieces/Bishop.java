@@ -1,8 +1,10 @@
 package pieces;
 
+import game.Board;
+
 public class Bishop extends Piece {
-    public Bishop(boolean isWhite, int col, int row) {
-        super(isWhite, col, row);
+    public Bishop(Board board, boolean isWhite, int col, int row) {
+        super(board, isWhite, col, row);
         if(isWhite()) {
             image=getImage("/images/Light/Bishop");
         }

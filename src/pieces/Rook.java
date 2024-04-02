@@ -1,8 +1,10 @@
 package pieces;
 
+import game.Board;
+
 public class Rook extends Piece {
-    public Rook(boolean isWhite , int col ,int row) {
-        super(isWhite, col , row);
+    public Rook(Board board, boolean isWhite , int col , int row) {
+        super(board, isWhite, col , row);
         if(isWhite()) {
             image=getImage("/images/Light/Rook");
         }

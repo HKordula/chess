@@ -1,8 +1,10 @@
 package pieces;
 
+import game.Board;
+
 public class Queen extends Piece{
-    public Queen(boolean isWhite, int col, int row) {
-        super(isWhite, col , row);
+    public Queen(Board board, boolean isWhite, int col, int row) {
+        super(board, isWhite, col , row);
         if(isWhite()) {
             image=getImage("/images/Light/Queen");
         }
