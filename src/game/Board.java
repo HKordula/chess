@@ -2,6 +2,7 @@ package game;
 
 import pieces.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -9,13 +10,17 @@ public class Board {
     final int COLUMNS = 8;
     final int ROWS = 8;
     final private Square[][] squares = new Square[ROWS][COLUMNS];
-    final private int startX, startY;
+    public final int startX;
+    public final int startY;
     public static ArrayList<Piece> pieces = new ArrayList<>();
+
+    public Piece selectedPiece;
 
 
     public Board(int startX, int startY) {
         this.startX = startX;
         this.startY = startY;
+        setPieces();
     }
 
     public void setPieces() {
@@ -46,6 +51,42 @@ public class Board {
         pieces.add(new Rook(this,false,7,0));
     }
 
+    public Piece getPiece(int col, int row) {
+        for( Piece piece : pieces) {
+            if(piece.col == col && piece.row == row) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    public void makeMove(Move move) {
+        move.piece.col = move.postCol;
+        move.piece.row = move.postRow;
+        move.piece.x = move.postCol * Square.SQUARE_SIZE;
+        move.piece.y = move.postRow * Square.SQUARE_SIZE;
+
+        capture(move);
+    }
+    public void capture(Move move) {
+        pieces.remove(move.capture);
+    }
+
+    public  boolean isValidMove(Move move) {
+        if(sameTeam(move.piece, move.capture)) {
+            return false;
+        } else if (move.postCol < 0 || move.postCol >7 || move.postRow < 0 || move.postRow >7) {
+            return  false;
+        }
+        return true;
+    }
+    public boolean sameTeam(Piece p1, Piece p2) {
+        if (p1 == null || p2 == null) {
+            return false;
+        }
+        return p1.isWhite() == p2.isWhite();
+    }
+
     public void draw(Graphics2D board) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
@@ -59,7 +100,8 @@ public class Board {
                 squares[i][j].draw(board);
             }
         }
-        for(Piece p : pieces) {
+        ArrayList<Piece> piecesCopy = new ArrayList<>(pieces);
+        for(Piece p : piecesCopy) {
             p.draw(board);
         }
     }

@@ -13,7 +13,7 @@ public abstract class Piece {
     private final boolean isWhite;
     public BufferedImage image;
     public int x,y;
-    public int col,row,preCol,preRow;
+    public int col,row;
     Board board;
 
 
@@ -22,18 +22,10 @@ public abstract class Piece {
         this.isWhite = isWhite;
         this.col = col;
         this.row = row;
-        x =getX(col);
-        y = getY(row);
-        preCol=col;
-        preRow=row;
+        this.x = col * Square.SQUARE_SIZE;
+        this.y = row * Square.SQUARE_SIZE;
     }
 
-    public int getX(int col) {
-        return col * Square.SQUARE_SIZE;
-    }
-    public int getY(int row) {
-        return row * Square.SQUARE_SIZE;
-    }
     public BufferedImage getImage(String path) {
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + ".png")));
@@ -46,6 +38,6 @@ public abstract class Piece {
         return isWhite;
     }
     public void draw(Graphics2D g) {
-        g.drawImage(image,x+50,y+50,Square.SQUARE_SIZE,Square.SQUARE_SIZE,null);
+        g.drawImage(image,x + board.startX ,y + board.startY ,Square.SQUARE_SIZE,Square.SQUARE_SIZE,null);
     }
 }
