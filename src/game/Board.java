@@ -66,6 +66,8 @@ public class Board {
         move.piece.x = move.postCol * Square.SQUARE_SIZE;
         move.piece.y = move.postRow * Square.SQUARE_SIZE;
 
+        move.piece.isFirstMove = false;
+
         capture(move);
     }
     public void capture(Move move) {
@@ -73,11 +75,15 @@ public class Board {
     }
 
     public  boolean isValidMove(Move move) {
-        if(sameTeam(move.piece, move.capture)) {
+        if(sameTeam(move.piece, move.capture))
             return false;
-        } else if (move.postCol < 0 || move.postCol >7 || move.postRow < 0 || move.postRow >7) {
+        if (move.postCol < 0 || move.postCol >7 || move.postRow < 0 || move.postRow >7)
             return  false;
-        }
+        if (!move.piece.canMove(move.postCol, move.postRow))
+            return false;
+        if (move.piece.moveCollision(move.postCol, move.postRow))
+            return false;
+
         return true;
     }
     public boolean sameTeam(Piece p1, Piece p2) {
@@ -100,9 +106,27 @@ public class Board {
                 squares[i][j].draw(board);
             }
         }
+
+        if (selectedPiece != null) {
+            for(int i = 0 ; i < ROWS; i++) {
+                for (int j = 0 ; j < COLUMNS ; j++) {
+                    if(isValidMove(new Move(this,selectedPiece,i,j))) {
+                        board.setColor(new Color(54, 183, 54, 179));
+                        board.fillRect(i * Square.SQUARE_SIZE +50, j*Square.SQUARE_SIZE +50,Square.SQUARE_SIZE,Square.SQUARE_SIZE);
+                    }
+                }
+            }
+        }
+
         ArrayList<Piece> piecesCopy = new ArrayList<>(pieces);
         for(Piece p : piecesCopy) {
-            p.draw(board);
+            if(p != selectedPiece) {
+                p.draw(board);
+            }
+            if(selectedPiece != null) {
+                selectedPiece.draw(board);
+            }
+
         }
     }
 }

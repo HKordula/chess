@@ -12,4 +12,7 @@ public class Knight extends Piece {
             image=getImage("/images/Dark/Knight");
         }
     }
+    public boolean canMove(int col, int row) {
+        return Math.abs(col - this.col) * Math.abs(row - this.row) == 2;
+    }
 }

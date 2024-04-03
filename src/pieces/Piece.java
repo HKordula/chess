@@ -15,6 +15,7 @@ public abstract class Piece {
     public int x,y;
     public int col,row;
     Board board;
+    public boolean isFirstMove = true;
 
 
     public Piece(Board board, boolean isWhite, int col, int row) {
@@ -36,6 +37,12 @@ public abstract class Piece {
     }
     public boolean isWhite() {
         return isWhite;
+    }
+    public boolean canMove(int col, int row) {
+        return true;
+    }
+    public boolean moveCollision(int col, int row) {
+        return false;
     }
     public void draw(Graphics2D g) {
         g.drawImage(image,x + board.startX ,y + board.startY ,Square.SQUARE_SIZE,Square.SQUARE_SIZE,null);
