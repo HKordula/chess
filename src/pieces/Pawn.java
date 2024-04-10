@@ -22,6 +22,12 @@ public class Pawn extends Piece {
             return true;
         if(col == this.col + 1 && row == this.row - direction && board.getPiece(col,row) != null)
             return true;
+        if(board.getTileNum(col, row) == board.enPassantTarget && col == this.col - 1 && row == this.row - direction && board.getPiece(col, row + direction) != null){
+            return true;
+        }
+        if(board.getTileNum(col, row) == board.enPassantTarget && col == this.col + 1 && row == this.row - direction && board.getPiece(col, row + direction) != null){
+            return true;
+        }
 
         return false;
     }

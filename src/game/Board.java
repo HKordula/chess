@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static java.awt.AWTEventMulticaster.add;
+
 public class Board {
     final int COLUMNS = 8;
     final int ROWS = 8;
@@ -15,12 +17,18 @@ public class Board {
     public static ArrayList<Piece> pieces = new ArrayList<>();
 
     public Piece selectedPiece;
+    public int enPassantTarget = -1;
+    Game game;
 
-
-    public Board(int startX, int startY) {
+    public Board(int startX, int startY, Game game) {
         this.startX = startX;
         this.startY = startY;
+        this.game = game;
         setPieces();
+    }
+
+    public int getTileNum(int col, int row) {
+        return row * ROWS + col;
     }
 
     public void setPieces() {
@@ -61,6 +69,36 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+        if(move.piece instanceof Pawn) {
+            pawnMove(move);
+        } else {
+            move.piece.col = move.postCol;
+            move.piece.row = move.postRow;
+            move.piece.x = move.postCol * Square.SQUARE_SIZE;
+            move.piece.y = move.postRow * Square.SQUARE_SIZE;
+
+            move.piece.isFirstMove = false;
+
+            capture(move.capture);
+        }
+
+    }
+    public void pawnMove(Move move) {
+        int colorIndex = move.piece.isWhite() ? 1 : -1;
+
+        if(getTileNum(move.postCol, move.postRow) == enPassantTarget) {
+            move.capture = getPiece(move.postCol, move.postRow + colorIndex);
+        }
+        if(Math.abs(move.piece.row -move.postRow) == 2) {
+            enPassantTarget = getTileNum(move.postCol, move.postRow + colorIndex);
+        } else {
+            enPassantTarget = -1;
+        }
+
+        if(selectedPiece.isWhite() && move.postRow == 0 || !selectedPiece.isWhite() && move.postRow == 7) {
+            Move promotionMove = new Move(this, selectedPiece, move.postCol, move.postRow);
+            game.displayPromotionPanel(promotionMove);
+        }
         move.piece.col = move.postCol;
         move.piece.row = move.postRow;
         move.piece.x = move.postCol * Square.SQUARE_SIZE;
@@ -68,10 +106,28 @@ public class Board {
 
         move.piece.isFirstMove = false;
 
-        capture(move);
+        capture(move.capture);
     }
-    public void capture(Move move) {
-        pieces.remove(move.capture);
+
+    public void promotePawn(Move move, String PieceType) {
+        pieces.remove(move.piece);
+        if(PieceType.equals("Queen")) {
+            pieces.add(new Queen(this, move.piece.isWhite(), move.postCol, move.postRow));
+        } else if (PieceType.equals("Rook")) {
+            pieces.add(new Rook(this, move.piece.isWhite(), move.postCol, move.postRow));
+        } else if (PieceType.equals("Bishop")) {
+            pieces.add(new Bishop(this, move.piece.isWhite(), move.postCol, move.postRow));
+        } else if (PieceType.equals("Knight")) {
+            pieces.add(new Knight(this, move.piece.isWhite(), move.postCol, move.postRow));
+        } else {
+            pieces.add(new Queen(this, move.piece.isWhite(), move.postCol, move.postRow));
+        }
+
+    }
+
+
+    public void capture(Piece piece) {
+        pieces.remove(piece);
     }
 
     public  boolean isValidMove(Move move) {
