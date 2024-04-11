@@ -1,7 +1,5 @@
 package game;
 
-import pieces.Piece;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +9,9 @@ public class Game extends JPanel {
     Board board;
     Mouse mouse;
     PromotionPanel promotionPanel;
+    Player playerWhite;
+    Player playerBlack;
+    Player currentPlayer;
 
     public Game() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -18,6 +19,11 @@ public class Game extends JPanel {
         setLayout(null);
         board = new Board(50, 50, this);
         mouse = new Mouse(board, this);
+
+        playerWhite = new Player("Hubert","White");
+        playerBlack = new Player("Player2","Black");
+        currentPlayer = playerWhite;
+
         promotionPanel = new PromotionPanel(board, this);
         promotionPanel.setVisible(false);
         add(promotionPanel);
@@ -30,6 +36,14 @@ public class Game extends JPanel {
         String color = move.piece.isWhite() ? "Light" : "Dark";
         promotionPanel.setMove(move, color);
         promotionPanel.setVisible(true);
+    }
+
+    public void switchTurn() {
+        if(currentPlayer == playerWhite) {
+            currentPlayer = playerBlack;
+        } else {
+            currentPlayer = playerWhite;
+        }
     }
 
     public void paintComponent(Graphics g) {

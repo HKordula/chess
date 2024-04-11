@@ -1,7 +1,7 @@
 package game;
 
 import java.awt.*;
-import pieces.Piece;
+
 public class Square {
     private final int row, column;
     private final Color color;

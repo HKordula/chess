@@ -1,7 +1,5 @@
 package game;
 
-import pieces.Queen;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +32,7 @@ public class PromotionPanel extends JPanel {
                         board.promotePawn(move, pieceType);
                         game.repaint();
                         setVisible(false);
+                        game.switchTurn();
                     }
                 }
             });

@@ -2,11 +2,8 @@ package game;
 
 import pieces.*;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
-import static java.awt.AWTEventMulticaster.add;
 
 public class Board {
     final int COLUMNS = 8;
@@ -80,6 +77,7 @@ public class Board {
             move.piece.isFirstMove = false;
 
             capture(move.capture);
+            game.switchTurn();
         }
 
     }
@@ -98,6 +96,8 @@ public class Board {
         if(selectedPiece.isWhite() && move.postRow == 0 || !selectedPiece.isWhite() && move.postRow == 7) {
             Move promotionMove = new Move(this, selectedPiece, move.postCol, move.postRow);
             game.displayPromotionPanel(promotionMove);
+        } else {
+            game.switchTurn();
         }
         move.piece.col = move.postCol;
         move.piece.row = move.postRow;
@@ -107,6 +107,8 @@ public class Board {
         move.piece.isFirstMove = false;
 
         capture(move.capture);
+
+
     }
 
     public void promotePawn(Move move, String PieceType) {
@@ -125,12 +127,13 @@ public class Board {
 
     }
 
-
     public void capture(Piece piece) {
         pieces.remove(piece);
     }
 
     public  boolean isValidMove(Move move) {
+        if((!move.piece.isWhite() && game.currentPlayer == game.playerWhite) || (move.piece.isWhite() && game.currentPlayer == game.playerBlack))
+            return false;
         if(sameTeam(move.piece, move.capture))
             return false;
         if (move.postCol < 0 || move.postCol >7 || move.postRow < 0 || move.postRow >7)
@@ -139,7 +142,8 @@ public class Board {
             return false;
         if (move.piece.moveCollision(move.postCol, move.postRow))
             return false;
-
+        if(game.promotionPanel.isVisible())
+            return false;
         return true;
     }
     public boolean sameTeam(Piece p1, Piece p2) {
