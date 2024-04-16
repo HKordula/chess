@@ -34,12 +34,12 @@ public class Board {
             pieces.add(new Pawn(this,true,i,6));
         }
         pieces.add(new Rook(this,true,0,7));
-        pieces.add(new Knight(this,true,1,7));
-        pieces.add(new Bishop(this,true,2,7));
-        pieces.add(new Queen(this,true,3,7));
+//        pieces.add(new Knight(this,true,1,7));
+//        pieces.add(new Bishop(this,true,2,7));
+//        pieces.add(new Queen(this,true,3,7));
         pieces.add(new King(this,true,4,7));
-        pieces.add(new Bishop(this,true,5,7));
-        pieces.add(new Knight(this,true,6,7));
+//        pieces.add(new Bishop(this,true,5,7));
+//        pieces.add(new Knight(this,true,6,7));
         pieces.add(new Rook(this,true,7,7));
 
         //BLACK
@@ -47,12 +47,12 @@ public class Board {
             pieces.add(new Pawn(this,false,i,1));
         }
         pieces.add(new Rook(this,false,0,0));
-        pieces.add(new Knight(this,false,1,0));
-        pieces.add(new Bishop(this,false,2,0));
-        pieces.add(new Queen(this,false,3,0));
+//        pieces.add(new Knight(this,false,1,0));
+//        pieces.add(new Bishop(this,false,2,0));
+//        pieces.add(new Queen(this,false,3,0));
         pieces.add(new King(this,false,4,0));
-        pieces.add(new Bishop(this,false,5,0));
-        pieces.add(new Knight(this,false,6,0));
+//        pieces.add(new Bishop(this,false,5,0));
+//        pieces.add(new Knight(this,false,6,0));
         pieces.add(new Rook(this,false,7,0));
     }
 
@@ -68,6 +68,8 @@ public class Board {
     public void makeMove(Move move) {
         if(move.piece instanceof Pawn) {
             pawnMove(move);
+        } else if (move.piece instanceof  King) {
+            kingMove(move);
         } else {
             move.piece.col = move.postCol;
             move.piece.row = move.postRow;
@@ -81,6 +83,29 @@ public class Board {
         }
 
     }
+    private void kingMove(Move move) {
+        if(Math.abs(move.piece.col - move.postCol) == 2) {
+            Piece rook;
+            if(move.piece.col < move.postCol) {
+                rook = getPiece(7,move.piece.row);
+                rook.col = 5;
+            } else {
+                rook = getPiece(0,move.piece.row);
+                rook.col = 3;
+            }
+            rook.x = rook.col * Square.SQUARE_SIZE;
+        }
+        move.piece.col = move.postCol;
+        move.piece.row = move.postRow;
+        move.piece.x = move.postCol * Square.SQUARE_SIZE;
+        move.piece.y = move.postRow * Square.SQUARE_SIZE;
+
+        move.piece.isFirstMove = false;
+
+        capture(move.capture);
+        game.switchTurn();
+    }
+
     public void pawnMove(Move move) {
         int colorIndex = move.piece.isWhite() ? 1 : -1;
 
