@@ -84,25 +84,34 @@ public class Board {
 
     }
     private void kingMove(Move move) {
-        if(Math.abs(move.piece.col - move.postCol) == 2) {
-            Piece rook;
+        if(Math.abs(move.piece.col - move.postCol) >= 2) {
+            Piece rook, king;
             if(move.piece.col < move.postCol) {
                 rook = getPiece(7,move.piece.row);
+                king = getPiece(move.piece.col, move.piece.row);
                 rook.col = 5;
+                king.col = 6;
             } else {
                 rook = getPiece(0,move.piece.row);
+                king = getPiece(move.piece.col, move.piece.row);
                 rook.col = 3;
+                king.col = 2;
             }
             rook.x = rook.col * Square.SQUARE_SIZE;
+            king.x = king.col * Square.SQUARE_SIZE;
+            king.y = king.row * Square.SQUARE_SIZE;
+        } else {
+            move.piece.col = move.postCol;
+            move.piece.row = move.postRow;
+            move.piece.x = move.postCol * Square.SQUARE_SIZE;
+            move.piece.y = move.postRow * Square.SQUARE_SIZE;
+            capture(move.capture);
         }
-        move.piece.col = move.postCol;
-        move.piece.row = move.postRow;
-        move.piece.x = move.postCol * Square.SQUARE_SIZE;
-        move.piece.y = move.postRow * Square.SQUARE_SIZE;
+
 
         move.piece.isFirstMove = false;
 
-        capture(move.capture);
+
         game.switchTurn();
     }
 
@@ -173,6 +182,9 @@ public class Board {
     }
     public boolean sameTeam(Piece p1, Piece p2) {
         if (p1 == null || p2 == null) {
+            return false;
+        }
+        if ((p1 instanceof King && p2 instanceof Rook || p1 instanceof Rook && p2 instanceof King) && p1.isFirstMove && p2.isFirstMove) {
             return false;
         }
         return p1.isWhite() == p2.isWhite();
