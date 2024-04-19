@@ -5,7 +5,7 @@ import pieces.Piece;
 public class Move {
     int preCol, preRow;
     int postCol,postRow;
-    Piece piece;
+    public Piece piece;
     Piece capture;
 
     public Move(Board board, Piece piece, int postCol, int postRow) {

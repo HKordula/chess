@@ -16,6 +16,7 @@ public class Board {
     public Piece selectedPiece;
     public int enPassantTarget = -1;
     Game game;
+    Check check = new Check(this);
 
     public Board(int startX, int startY, Game game) {
         this.startX = startX;
@@ -34,12 +35,12 @@ public class Board {
             pieces.add(new Pawn(this,true,i,6));
         }
         pieces.add(new Rook(this,true,0,7));
-//        pieces.add(new Knight(this,true,1,7));
-//        pieces.add(new Bishop(this,true,2,7));
-//        pieces.add(new Queen(this,true,3,7));
+        pieces.add(new Knight(this,true,1,7));
+        pieces.add(new Bishop(this,true,2,7));
+        pieces.add(new Queen(this,true,3,7));
         pieces.add(new King(this,true,4,7));
-//        pieces.add(new Bishop(this,true,5,7));
-//        pieces.add(new Knight(this,true,6,7));
+        pieces.add(new Bishop(this,true,5,7));
+        pieces.add(new Knight(this,true,6,7));
         pieces.add(new Rook(this,true,7,7));
 
         //BLACK
@@ -47,12 +48,12 @@ public class Board {
             pieces.add(new Pawn(this,false,i,1));
         }
         pieces.add(new Rook(this,false,0,0));
-//        pieces.add(new Knight(this,false,1,0));
-//        pieces.add(new Bishop(this,false,2,0));
-//        pieces.add(new Queen(this,false,3,0));
+        pieces.add(new Knight(this,false,1,0));
+        pieces.add(new Bishop(this,false,2,0));
+        pieces.add(new Queen(this,false,3,0));
         pieces.add(new King(this,false,4,0));
-//        pieces.add(new Bishop(this,false,5,0));
-//        pieces.add(new Knight(this,false,6,0));
+        pieces.add(new Bishop(this,false,5,0));
+        pieces.add(new Knight(this,false,6,0));
         pieces.add(new Rook(this,false,7,0));
     }
 
@@ -178,6 +179,9 @@ public class Board {
             return false;
         if(game.promotionPanel.isVisible())
             return false;
+        if(check.isKingChecked(move)) {
+            return false;
+        }
         return true;
     }
     public boolean sameTeam(Piece p1, Piece p2) {
@@ -190,6 +194,15 @@ public class Board {
         return p1.isWhite() == p2.isWhite();
     }
 
+    public Piece findKing(boolean isWhite) {
+        for(Piece piece : pieces) {
+            if(isWhite == piece.isWhite() && piece instanceof King) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
     public void draw(Graphics2D board) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
@@ -200,9 +213,18 @@ public class Board {
                 } else {
                     squares[i][j] = new Square(x, y, new Color(75,115,153));
                 }
+                Piece whiteKing = findKing(true);
+                Piece blackKing = findKing(false);
+                if ((whiteKing != null && whiteKing.col == j && whiteKing.row == i && check.isKingChecked(new Move(this, whiteKing, j, i))) ||
+                        (blackKing != null && blackKing.col == j && blackKing.row == i && check.isKingChecked(new Move(this, blackKing, j, i)))) {
+                    squares[i][j] = new Square(x, y, Color.RED);
+                }
+
                 squares[i][j].draw(board);
             }
         }
+
+
 
         if (selectedPiece != null) {
             for(int i = 0 ; i < ROWS; i++) {
