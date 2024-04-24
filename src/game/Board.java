@@ -16,7 +16,7 @@ public class Board {
     public Piece selectedPiece;
     public int enPassantTarget = -1;
     Game game;
-    Check check = new Check(this);
+    public Check check = new Check(this);
 
     public Board(int startX, int startY, Game game) {
         this.startX = startX;
@@ -169,7 +169,7 @@ public class Board {
     public  boolean isValidMove(Move move) {
         if((!move.piece.isWhite() && game.currentPlayer == game.playerWhite) || (move.piece.isWhite() && game.currentPlayer == game.playerBlack))
             return false;
-        if(sameTeam(move.piece, move.capture))
+        if(sameTeam(move.piece, move.capture) && !isCastlingMove(move.piece, move.capture))
             return false;
         if (move.postCol < 0 || move.postCol >7 || move.postRow < 0 || move.postRow >7)
             return  false;
@@ -188,10 +188,11 @@ public class Board {
         if (p1 == null || p2 == null) {
             return false;
         }
-        if ((p1 instanceof King && p2 instanceof Rook || p1 instanceof Rook && p2 instanceof King) && p1.isFirstMove && p2.isFirstMove) {
-            return false;
-        }
         return p1.isWhite() == p2.isWhite();
+    }
+
+    public boolean isCastlingMove(Piece p1, Piece p2) {
+        return (p1 instanceof King && p2 instanceof Rook || p1 instanceof Rook && p2 instanceof King) && p1.isFirstMove && p2.isFirstMove;
     }
 
     public Piece findKing(boolean isWhite) {

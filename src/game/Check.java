@@ -20,6 +20,7 @@ public class Check {
             kingCol = move.postCol;
             kingRow = move.postRow;
         }
+
         return  rookChecked(move.postCol, move.postRow, king, kingCol, kingRow,0 ,1) ||
                 rookChecked(move.postCol, move.postRow, king, kingCol, kingRow,1 ,0) ||
                 rookChecked(move.postCol, move.postRow, king, kingCol, kingRow,0,-1) ||

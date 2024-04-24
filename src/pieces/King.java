@@ -1,6 +1,7 @@
 package pieces;
 
 import game.Board;
+import game.Move;
 
 public class King extends Piece{
     public King(Board board, boolean isWhite, int col , int row) {
@@ -22,14 +23,12 @@ public class King extends Piece{
             if( col == 6 || col == 7) {
                 Piece rook = board.getPiece(7,row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    return board.getPiece(5,row) == null && board.getPiece(6,row) == null;
-                    // dodać warunek szachowania
+                    return board.getPiece(5,row) == null && board.getPiece(6,row) == null && !board.check.isKingChecked(new Move(board,this,5,row));
                 }
             } else if (col == 2 || col == 1 || col == 0) {
                 Piece rook = board.getPiece(0,row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    return board.getPiece(1,row) == null && board.getPiece(2,row) == null && board.getPiece(3,row) == null;
-                    // dodać warunek szachowania
+                    return board.getPiece(1,row) == null && board.getPiece(2,row) == null && board.getPiece(3,row) == null && !board.check.isKingChecked(new Move(board,this,3,row));
                 }
             }
         }
