@@ -2,6 +2,8 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Game extends JPanel {
     public static final int WIDTH = 1500;
@@ -9,6 +11,7 @@ public class Game extends JPanel {
     Board board;
     Mouse mouse;
     PromotionPanel promotionPanel;
+    ConfigurationPanel configurationPanel;
     Player playerWhite;
     Player playerBlack;
     Player currentPlayer;
@@ -24,9 +27,17 @@ public class Game extends JPanel {
         playerBlack = new Player("Player2","Black");
         currentPlayer = playerWhite;
 
+        JButton playButton = createPlayButton();
+        add(playButton);
+
         promotionPanel = new PromotionPanel(board, this);
         promotionPanel.setVisible(false);
         add(promotionPanel);
+
+        configurationPanel = new ConfigurationPanel();
+        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 400);
+        configurationPanel.setVisible(true);
+        add(configurationPanel);
 
         this.addMouseListener(mouse);
         this.addMouseMotionListener(mouse);
@@ -36,6 +47,26 @@ public class Game extends JPanel {
         String color = move.piece.isWhite() ? "Light" : "Dark";
         promotionPanel.setMove(move, color);
         promotionPanel.setVisible(true);
+    }
+
+    private JButton createPlayButton() {
+        JButton playButton = new JButton("Play");
+        playButton.setFocusPainted(false);
+        playButton.setForeground(Color.WHITE);
+        playButton.setBackground(Color.DARK_GRAY);
+        playButton.setFont(new Font("Garamond", Font.BOLD, 60));
+        playButton.setBorder(null);
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                configurationPanel.setVisible(true);
+            }
+
+        });
+        playButton.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 75, board.startY + 650, 400, 100);
+        add(playButton);
+        return playButton;
     }
 
     public void switchTurn() {
