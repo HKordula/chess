@@ -6,60 +6,75 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Random;
 
 public class ConfigurationPanel extends JPanel {
+    private JTextField player1Name;
+    private JComboBox<String> player1Color;
+    private JTextField player2Name;
+    private JComboBox<String> player2Color;
 
     public ConfigurationPanel() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new FlowLayout(FlowLayout.CENTER));
 
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        Font font = new Font("Arial", Font.BOLD, 18); // Create a Font object
+        Font font = new Font("Arial", Font.BOLD, 18);
 
-        JPanel player1Panel = new JPanel(new GridLayout(1, 2));
-        JLabel label1 = new JLabel("Player name:");
+        JPanel player1Panel = new JPanel(new GridLayout(1, 2,15,40));
+        JLabel label1 = new JLabel("Name:");
         label1.setFont(font);
         player1Panel.add(label1);
-        player1Panel.add(new JTextField());
+        player1Name = new JTextField();
+        player1Name.setPreferredSize(new Dimension(120,40));
+        player1Name.setFont(font);
+        player1Panel.add(player1Name);
         JLabel label2 = new JLabel("Color:");
         label2.setFont(font);
-        label2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
         player1Panel.add(label2);
-        JComboBox<String> player1Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
+        player1Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
+        player1Color.setFont(font);
         player1Panel.add(player1Color);
         add(player1Panel);
 
-        JPanel player2Panel = new JPanel(new GridLayout(1, 2));
-        JLabel label3 = new JLabel("Player name:");
+        JPanel player2Panel = new JPanel(new GridLayout(1, 2,15,40));
+        JLabel label3 = new JLabel("Name:");
         label3.setFont(font);
         player2Panel.add(label3);
-        player2Panel.add(new JTextField(5));
+        player2Name = new JTextField();
+        player2Name.setPreferredSize(new Dimension(120,40));
+        player2Name.setFont(font);
+        player2Panel.add(player2Name);
         JLabel label4 = new JLabel("Color:");
         label4.setFont(font);
-        label4.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
         player2Panel.add(label4);
-        JComboBox<String> player2Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
+        player2Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
         player2Color.setSelectedItem("Black");
+        player2Color.setFont(font);
         player2Panel.add(player2Color);
         add(player2Panel);
 
-        JPanel timePanel = new JPanel(new GridLayout(1, 3));
+        JPanel timePanel = new JPanel(new GridLayout(1, 2,14,40));
         JLabel label5 = new JLabel("Time:");
         label5.setFont(font);
         timePanel.add(label5);
         JCheckBox timeCheckBox = new JCheckBox();
+        timeCheckBox.setPreferredSize(new Dimension(60,40));
+        timeCheckBox.setFont(font);
         timePanel.add(timeCheckBox);
         JLabel label6 = new JLabel("Hours:");
         label6.setFont(font);
         timePanel.add(label6);
         JSpinner hoursSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
         hoursSpinner.setEnabled(false);
+        hoursSpinner.setFont(font);
         timePanel.add(hoursSpinner);
         JLabel label7 = new JLabel("Minutes:");
         label7.setFont(font);
         timePanel.add(label7);
         JSpinner minutesSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 59, 1));
         minutesSpinner.setEnabled(false);
+        minutesSpinner.setFont(font);
         timePanel.add(minutesSpinner);
         add(timePanel);
 
@@ -108,4 +123,35 @@ public class ConfigurationPanel extends JPanel {
             }
         });
     }
+
+    public String getPlayerName(String player) {
+        if(player.equals("Player1")) {
+            return player1Name.getText();
+        } else {
+            return  player2Name.getText();
+        }
+    }
+
+    public String getPlayerColor(String player) {
+        String selectedColor;
+        if(player.equals("Player1")) {
+            selectedColor = (String) player1Color.getSelectedItem();
+        } else {
+            selectedColor = (String) player2Color.getSelectedItem();
+        }
+
+        if ("Random".equals(selectedColor)) {
+            Random random = new Random();
+            selectedColor = random.nextBoolean() ? "White" : "Black";
+        }
+
+        if (player.equals("Player2")) {
+            if (getPlayerColor("Player1").equals(selectedColor)) {
+                selectedColor = selectedColor.equals("White") ? "Black" : "White";
+            }
+        }
+
+        return selectedColor;
+    }
+
 }

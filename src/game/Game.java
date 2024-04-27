@@ -23,10 +23,6 @@ public class Game extends JPanel {
         board = new Board(50, 50, this);
         mouse = new Mouse(board, this);
 
-        playerWhite = new Player("Hubert","White");
-        playerBlack = new Player("Player2","Black");
-        currentPlayer = playerWhite;
-
         JButton playButton = createPlayButton();
         add(playButton);
 
@@ -35,7 +31,7 @@ public class Game extends JPanel {
         add(promotionPanel);
 
         configurationPanel = new ConfigurationPanel();
-        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 400);
+        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 180);
         configurationPanel.setVisible(true);
         add(configurationPanel);
 
@@ -59,8 +55,20 @@ public class Game extends JPanel {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String playerNameWhite = configurationPanel.getPlayerName("Player1");
+                String playerColorWhite = configurationPanel.getPlayerColor("Player1");
+                playerWhite = new Player(playerNameWhite, playerColorWhite);
+                System.out.println(playerWhite.name+ " " + playerWhite.color);
 
-                configurationPanel.setVisible(true);
+                String playerNameBlack = configurationPanel.getPlayerName("Player2");
+                String playerColorBlack = configurationPanel.getPlayerColor("Player2");
+                playerBlack = new Player(playerNameBlack, playerColorBlack);
+                System.out.println(playerBlack.name+ " " + playerBlack.color);
+
+
+                currentPlayer = playerWhite;
+                configurationPanel.setVisible(false);
+                playButton.setVisible(false);
             }
 
         });
