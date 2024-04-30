@@ -12,6 +12,8 @@ public class Game extends JPanel {
     Mouse mouse;
     PromotionPanel promotionPanel;
     ConfigurationPanel configurationPanel;
+    PlayerPanel playerPanel;
+    PlayerPanel playerPanel2;
     Player playerWhite;
     Player playerBlack;
     Player currentPlayer;
@@ -65,6 +67,14 @@ public class Game extends JPanel {
                 playerBlack = new Player(playerNameBlack, playerColorBlack);
                 System.out.println(playerBlack.name+ " " + playerBlack.color);
 
+                playerPanel = new PlayerPanel(playerWhite);
+                playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                playerPanel.setVisible(true);
+                add(playerPanel);
+                playerPanel2 = new PlayerPanel(playerBlack);
+                playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
+                playerPanel2.setVisible(true);
+                add(playerPanel2);
 
                 currentPlayer = playerWhite;
                 configurationPanel.setVisible(false);
