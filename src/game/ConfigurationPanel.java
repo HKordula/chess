@@ -13,6 +13,8 @@ public class ConfigurationPanel extends JPanel {
     private JComboBox<String> player1Color;
     private JTextField player2Name;
     private JComboBox<String> player2Color;
+    JSpinner hoursSpinner;
+    JSpinner minutesSpinner;
 
     public ConfigurationPanel() {
         setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -65,14 +67,14 @@ public class ConfigurationPanel extends JPanel {
         JLabel label6 = new JLabel("Hours:");
         label6.setFont(font);
         timePanel.add(label6);
-        JSpinner hoursSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
+        hoursSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
         hoursSpinner.setEnabled(false);
         hoursSpinner.setFont(font);
         timePanel.add(hoursSpinner);
         JLabel label7 = new JLabel("Minutes:");
         label7.setFont(font);
         timePanel.add(label7);
-        JSpinner minutesSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 59, 1));
+        minutesSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 59, 1));
         minutesSpinner.setEnabled(false);
         minutesSpinner.setFont(font);
         timePanel.add(minutesSpinner);
@@ -128,7 +130,7 @@ public class ConfigurationPanel extends JPanel {
         if(player.equals("Player1")) {
             return player1Name.getText();
         } else {
-            return  player2Name.getText();
+            return player2Name.getText();
         }
     }
 
@@ -136,22 +138,16 @@ public class ConfigurationPanel extends JPanel {
         String selectedColor;
         if(player.equals("Player1")) {
             selectedColor = (String) player1Color.getSelectedItem();
+            if(selectedColor.equals("Random")) {
+                selectedColor = new Random().nextBoolean() ? "White" : "Black";
+                player2Color.setSelectedItem(selectedColor.equals("White") ? "Black" : "White");
+            }
         } else {
             selectedColor = (String) player2Color.getSelectedItem();
-        }
-
-        if ("Random".equals(selectedColor)) {
-            Random random = new Random();
-            selectedColor = random.nextBoolean() ? "White" : "Black";
-        }
-
-        if (player.equals("Player2")) {
-            if (getPlayerColor("Player1").equals(selectedColor)) {
-                selectedColor = selectedColor.equals("White") ? "Black" : "White";
+            if(selectedColor.equals("Random")) {
+                selectedColor = player1Color.getSelectedItem().equals("White") ? "Black" : "White";
             }
         }
-
         return selectedColor;
     }
-
 }

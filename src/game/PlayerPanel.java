@@ -2,6 +2,12 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerPanel extends JPanel {
     Player player;
@@ -14,9 +20,13 @@ public class PlayerPanel extends JPanel {
     private JButton button2;
     private JButton button3;
     private JButton button4;
+    private ConfigurationPanel configurationPanel;
 
-    public PlayerPanel(Player player) {
+    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+
+    public PlayerPanel(Player player, ConfigurationPanel configurationPanel) {
         this.player = player;
+        this.configurationPanel = configurationPanel;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         Font font = new Font("Arial", Font.BOLD, 30);
@@ -27,8 +37,35 @@ public class PlayerPanel extends JPanel {
         playerName.setFont(font);
         gameBalance = new JLabel( player.getBalance());
         gameBalance.setFont(font);
-        timeLabel = new JLabel("10:00");
+        timeLabel = new JLabel();
         timeLabel.setFont(font);
+
+        int hours = (Integer) configurationPanel.hoursSpinner.getValue();
+        int minutes = (Integer) configurationPanel.minutesSpinner.getValue();
+        long timeRemaining = (hours * 60 + minutes) * 60 * 1000;
+        CountdownTimer countdownTimer = new CountdownTimer(timeRemaining);
+        countdownTimer.start();
+
+        ActionListener timerActionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                long offset = TimeZone.getDefault().getRawOffset();
+                Date date = new Date(countdownTimer.getTimeRemaining() - offset);
+                SimpleDateFormat formatter;
+                if (countdownTimer.getTimeRemaining() >= 3600000) {
+                    formatter = new SimpleDateFormat("HH:mm:ss");
+                } else {
+                    formatter = new SimpleDateFormat("mm:ss");
+                }
+                String time = formatter.format(date);
+                timeLabel.setText(time);
+            }
+        };
+
+        Timer timer = new Timer(1000, timerActionListener);
+        timer.start();
+
+        timerActionListener.actionPerformed(null);
 
         JPanel infoPanel = new JPanel(new FlowLayout());
         infoPanel.add(imageLabel);
@@ -37,10 +74,10 @@ public class PlayerPanel extends JPanel {
         infoPanel.add(timeLabel);
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
-        button1 = new JButton("Button 1");
-        button2 = new JButton("Button 2");
-        button3 = new JButton("Button 3");
-        button4 = new JButton("Button 4");
+        button1 = new JButton("Surrender");
+        button2 = new JButton("Draw");
+        button3 = new JButton("New Game");
+        button4 = new JButton("Rematch");
 
         buttonPanel.add(button1);
         buttonPanel.add(button2);

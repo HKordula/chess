@@ -67,11 +67,11 @@ public class Game extends JPanel {
                 playerBlack = new Player(playerNameBlack, playerColorBlack);
                 System.out.println(playerBlack.name+ " " + playerBlack.color);
 
-                playerPanel = new PlayerPanel(playerWhite);
+                playerPanel = new PlayerPanel(playerWhite, configurationPanel);
                 playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
                 playerPanel.setVisible(true);
                 add(playerPanel);
-                playerPanel2 = new PlayerPanel(playerBlack);
+                playerPanel2 = new PlayerPanel(playerBlack, configurationPanel);
                 playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
                 playerPanel2.setVisible(true);
                 add(playerPanel2);
@@ -93,6 +93,14 @@ public class Game extends JPanel {
         } else {
             currentPlayer = playerWhite;
         }
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public void paintComponent(Graphics g) {
