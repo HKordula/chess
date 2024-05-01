@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerPanel extends JPanel {
     Player player;
+    private CountdownTimer countdownTimer;
     private JLabel playerName;
     private JLabel gameBalance;
     private JLabel timeLabel;
@@ -22,9 +23,7 @@ public class PlayerPanel extends JPanel {
     private JButton button4;
     private ConfigurationPanel configurationPanel;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-
-    public PlayerPanel(Player player, ConfigurationPanel configurationPanel) {
+    public PlayerPanel(Player player, ConfigurationPanel configurationPanel, boolean startTimer) {
         this.player = player;
         this.configurationPanel = configurationPanel;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -43,22 +42,28 @@ public class PlayerPanel extends JPanel {
         int hours = (Integer) configurationPanel.hoursSpinner.getValue();
         int minutes = (Integer) configurationPanel.minutesSpinner.getValue();
         long timeRemaining = (hours * 60 + minutes) * 60 * 1000;
-        CountdownTimer countdownTimer = new CountdownTimer(timeRemaining);
-        countdownTimer.start();
+        if (configurationPanel.timeCheckBox.isSelected()) {
+            countdownTimer = new CountdownTimer(timeRemaining);
+            if (startTimer) {
+                countdownTimer.start();
+            }
+        }
 
         ActionListener timerActionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                long offset = TimeZone.getDefault().getRawOffset();
-                Date date = new Date(countdownTimer.getTimeRemaining() - offset);
-                SimpleDateFormat formatter;
-                if (countdownTimer.getTimeRemaining() >= 3600000) {
-                    formatter = new SimpleDateFormat("HH:mm:ss");
-                } else {
-                    formatter = new SimpleDateFormat("mm:ss");
+                if (countdownTimer != null) {
+                    long offset = TimeZone.getDefault().getRawOffset();
+                    Date date = new Date(countdownTimer.getTimeRemaining() - offset);
+                    SimpleDateFormat formatter;
+                    if (countdownTimer.getTimeRemaining() >= 3600000) {
+                        formatter = new SimpleDateFormat("HH:mm:ss");
+                    } else {
+                        formatter = new SimpleDateFormat("mm:ss");
+                    }
+                    String time = formatter.format(date);
+                    timeLabel.setText(time);
                 }
-                String time = formatter.format(date);
-                timeLabel.setText(time);
             }
         };
 
@@ -86,5 +91,16 @@ public class PlayerPanel extends JPanel {
 
         add(infoPanel);
         add(buttonPanel);
+    }
+    public void startTimer() {
+        if (countdownTimer != null) {
+            countdownTimer.start();
+        }
+    }
+
+    public void stopTimer() {
+        if (countdownTimer != null) {
+            countdownTimer.stop();
+        }
     }
 }

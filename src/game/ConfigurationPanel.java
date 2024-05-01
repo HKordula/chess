@@ -13,6 +13,7 @@ public class ConfigurationPanel extends JPanel {
     private JComboBox<String> player1Color;
     private JTextField player2Name;
     private JComboBox<String> player2Color;
+    JCheckBox timeCheckBox;
     JSpinner hoursSpinner;
     JSpinner minutesSpinner;
 
@@ -60,7 +61,7 @@ public class ConfigurationPanel extends JPanel {
         JLabel label5 = new JLabel("Time:");
         label5.setFont(font);
         timePanel.add(label5);
-        JCheckBox timeCheckBox = new JCheckBox();
+        timeCheckBox = new JCheckBox();
         timeCheckBox.setPreferredSize(new Dimension(60,40));
         timeCheckBox.setFont(font);
         timePanel.add(timeCheckBox);

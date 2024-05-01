@@ -22,6 +22,10 @@ public class CountdownTimer {
         timer.start();
     }
 
+    public void stop() {
+        timer.stop();
+    }
+
     private void decrementTime() {
         timeRemaining -= 1000;
         if (timeRemaining < 0) {
