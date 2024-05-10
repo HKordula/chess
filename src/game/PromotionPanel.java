@@ -17,7 +17,7 @@ public class PromotionPanel extends JPanel {
         this.board = board;
         this.game = game;
         setLayout(new GridLayout(1, 4));
-        setBackground(Color.BLACK);
+        setBackground(new Color(75,115,153));
         setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 75, board.startY + 350, Square.SQUARE_SIZE * 4 , Square.SQUARE_SIZE); // Set the position and size of the panel
     }
 

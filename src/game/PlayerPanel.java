@@ -32,6 +32,7 @@ public class PlayerPanel extends JPanel {
 
         playerImage = new ImageIcon(getClass().getResource(player.getColor().equals("White") ? "/images/Light/Pawn.png" : "/images/Dark/Pawn.png"));
         imageLabel = new JLabel(playerImage);
+
         playerName = new JLabel( player.getName());
         playerName.setFont(font);
         gameBalance = new JLabel( player.getBalance());
@@ -80,9 +81,16 @@ public class PlayerPanel extends JPanel {
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
         button1 = new JButton("Surrender");
+        button1.setPreferredSize(new Dimension(100, 100));
+
         button2 = new JButton("Draw");
+        button2.setPreferredSize(new Dimension(100, 100));
+
         button3 = new JButton("New Game");
+        button3.setPreferredSize(new Dimension(100, 100));
+
         button4 = new JButton("Rematch");
+        button4.setPreferredSize(new Dimension(100, 100));
 
         buttonPanel.add(button1);
         buttonPanel.add(button2);

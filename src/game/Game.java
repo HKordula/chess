@@ -33,7 +33,7 @@ public class Game extends JPanel {
         add(promotionPanel);
 
         configurationPanel = new ConfigurationPanel();
-        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 180);
+        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 300, 550, 180);
         configurationPanel.setVisible(true);
         add(configurationPanel);
 
@@ -111,11 +111,7 @@ public class Game extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         board.draw(g2d);
 
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(new Color(235,232,210));
         g2d.fillRect(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 800);
-
-        g2d.setColor(Color.GREEN);
-        g2d.fillRect(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 75, board.startY + 350, 400, 100);
-
     }
 }
