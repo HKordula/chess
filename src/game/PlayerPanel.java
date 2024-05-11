@@ -26,19 +26,29 @@ public class PlayerPanel extends JPanel {
     public PlayerPanel(Player player, ConfigurationPanel configurationPanel, boolean startTimer) {
         this.player = player;
         this.configurationPanel = configurationPanel;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         Font font = new Font("Arial", Font.BOLD, 30);
 
+        setLayout(null);
+
         playerImage = new ImageIcon(getClass().getResource(player.getColor().equals("White") ? "/images/Light/Pawn.png" : "/images/Dark/Pawn.png"));
         imageLabel = new JLabel(playerImage);
+        imageLabel.setBounds(20, 0, 100, 100);
 
         playerName = new JLabel( player.getName());
         playerName.setFont(font);
+        playerName.setForeground(new Color(235,232,210));
+        playerName.setBounds(100, 0, 100, 100);
+
         gameBalance = new JLabel( player.getBalance());
         gameBalance.setFont(font);
+        gameBalance.setForeground(new Color(235,232,210));
+        gameBalance.setBounds(300, 0, 100, 100);
+
         timeLabel = new JLabel();
         timeLabel.setFont(font);
+        timeLabel.setForeground(new Color(235,232,210));
+        timeLabel.setBounds(400, 0, 100, 100);
 
         int hours = (Integer) configurationPanel.hoursSpinner.getValue();
         int minutes = (Integer) configurationPanel.minutesSpinner.getValue();
@@ -73,32 +83,49 @@ public class PlayerPanel extends JPanel {
 
         timerActionListener.actionPerformed(null);
 
-        JPanel infoPanel = new JPanel(new FlowLayout());
-        infoPanel.add(imageLabel);
-        infoPanel.add(playerName);
-        infoPanel.add(gameBalance);
-        infoPanel.add(timeLabel);
+        add(imageLabel);
+        add(playerName);
+        add(gameBalance);
+        add(timeLabel);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
         button1 = new JButton("Surrender");
-        button1.setPreferredSize(new Dimension(100, 100));
+        button1.setBounds(20, 110, 100, 80);
+        button1.setFocusPainted(false);
+        button1.setForeground(Color.WHITE);
+        button1.setBackground(Color.DARK_GRAY);
+        button1.setFont(new Font("Garamond", Font.BOLD, 15));
+        button1.setBorder(null);
 
         button2 = new JButton("Draw");
-        button2.setPreferredSize(new Dimension(100, 100));
+        button2.setBounds(140, 110, 100, 80);
+        button2.setFocusPainted(false);
+        button2.setForeground(Color.WHITE);
+        button2.setBackground(Color.DARK_GRAY);
+        button2.setFont(new Font("Garamond", Font.BOLD, 15));
+        button2.setBorder(null);
+
 
         button3 = new JButton("New Game");
-        button3.setPreferredSize(new Dimension(100, 100));
+        button3.setBounds(260, 110, 100, 80);
+        button3.setFocusPainted(false);
+        button3.setForeground(Color.WHITE);
+        button3.setBackground(Color.DARK_GRAY);
+        button3.setFont(new Font("Garamond", Font.BOLD, 15));
+        button3.setBorder(null);
 
         button4 = new JButton("Rematch");
-        button4.setPreferredSize(new Dimension(100, 100));
+        button4.setBounds(380, 110, 100, 80);
+        button4.setFocusPainted(false);
+        button4.setForeground(Color.WHITE);
+        button4.setBackground(Color.DARK_GRAY);
+        button4.setFont(new Font("Garamond", Font.BOLD, 15));
+        button4.setBorder(null);
 
-        buttonPanel.add(button1);
-        buttonPanel.add(button2);
-        buttonPanel.add(button3);
-        buttonPanel.add(button4);
+        add(button1);
+        add(button2);
+        add(button3);
+        add(button4);
 
-        add(infoPanel);
-        add(buttonPanel);
     }
     public void startTimer() {
         if (countdownTimer != null) {

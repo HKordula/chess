@@ -69,12 +69,17 @@ public class Game extends JPanel {
 
                 playerPanel = new PlayerPanel(playerWhite, configurationPanel, true);
                 playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                playerPanel.setBackground(new Color(75,115,153));
                 playerPanel.setVisible(true);
                 add(playerPanel);
                 playerPanel2 = new PlayerPanel(playerBlack, configurationPanel, false);
                 playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
+                playerPanel2.setBackground(new Color(75,115,153));
                 playerPanel2.setVisible(true);
                 add(playerPanel2);
+
+                revalidate();
+                repaint();
 
                 currentPlayer = playerWhite;
                 configurationPanel.setVisible(false);
