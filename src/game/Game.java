@@ -17,6 +17,9 @@ public class Game extends JPanel {
     Player playerWhite;
     Player playerBlack;
     Player currentPlayer;
+    private JLabel logoLabel;
+    private JLabel titleLabel;
+
 
     public Game() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -24,6 +27,20 @@ public class Game extends JPanel {
         setLayout(null);
         board = new Board(50, 50, this);
         mouse = new Mouse(board, this);
+
+        ImageIcon logoIcon = new ImageIcon(Main.class.getResource("/images/logo.png"));
+        Image logoImage = logoIcon.getImage();
+        Image resizedLogoImage = logoImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(resizedLogoImage);
+
+        logoLabel = new JLabel(logoIcon);
+        logoLabel.setBounds(1000, 100, 100, 100);
+
+        titleLabel = new JLabel("Chess");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
+        titleLabel.setBounds(1100, 100, 400, 100);
+        add(logoLabel);
+        add(titleLabel);
 
         JButton playButton = createPlayButton();
         add(playButton);
