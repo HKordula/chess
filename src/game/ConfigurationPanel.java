@@ -151,11 +151,19 @@ public class ConfigurationPanel extends JPanel {
     }
 
     public String getPlayerName(String player) {
+        String playerName;
         if(player.equals("Player1")) {
-            return player1Name.getText();
+            playerName = player1Name.getText();
+            if(playerName.isEmpty()) {
+                playerName = "Player 1";
+            }
         } else {
-            return player2Name.getText();
+            playerName = player2Name.getText();
+            if(playerName.isEmpty()) {
+                playerName = "Player 2";
+            }
         }
+        return playerName;
     }
 
     public String getPlayerColor(String player) {

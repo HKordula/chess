@@ -28,19 +28,7 @@ public class Game extends JPanel {
         board = new Board(50, 50, this);
         mouse = new Mouse(board, this);
 
-        ImageIcon logoIcon = new ImageIcon(Main.class.getResource("/images/logo.png"));
-        Image logoImage = logoIcon.getImage();
-        Image resizedLogoImage = logoImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        logoIcon = new ImageIcon(resizedLogoImage);
-
-        logoLabel = new JLabel(logoIcon);
-        logoLabel.setBounds(1000, 100, 100, 100);
-
-        titleLabel = new JLabel("Chess");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
-        titleLabel.setBounds(1100, 100, 400, 100);
-        add(logoLabel);
-        add(titleLabel);
+        createLogoPanel();
 
         JButton playButton = createPlayButton();
         add(playButton);
@@ -64,6 +52,22 @@ public class Game extends JPanel {
         promotionPanel.setVisible(true);
     }
 
+    private void createLogoPanel() {
+        ImageIcon logoIcon = new ImageIcon(Main.class.getResource("/images/logo.png"));
+        Image logoImage = logoIcon.getImage();
+        Image resizedLogoImage = logoImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(resizedLogoImage);
+
+        logoLabel = new JLabel(logoIcon);
+        logoLabel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 125, 100, 100, 100);
+
+        titleLabel = new JLabel("Chess");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
+        titleLabel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 225, 105, 400, 100);
+        add(logoLabel);
+        add(titleLabel);
+    }
+
     private JButton createPlayButton() {
         JButton playButton = new JButton("Play");
         playButton.setFocusPainted(false);
@@ -77,6 +81,7 @@ public class Game extends JPanel {
                 String playerNameWhite = configurationPanel.getPlayerName("Player1");
                 String playerColorWhite = configurationPanel.getPlayerColor("Player1");
                 playerWhite = new Player(playerNameWhite, playerColorWhite);
+                playerWhite.wins++;
                 System.out.println(playerWhite.name+ " " + playerWhite.color);
 
                 String playerNameBlack = configurationPanel.getPlayerName("Player2");
@@ -85,21 +90,32 @@ public class Game extends JPanel {
                 System.out.println(playerBlack.name+ " " + playerBlack.color);
 
                 playerPanel = new PlayerPanel(playerWhite, configurationPanel, true);
-                playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
                 playerPanel.setBackground(new Color(75,115,153));
                 playerPanel.setVisible(true);
-                add(playerPanel);
+
                 playerPanel2 = new PlayerPanel(playerBlack, configurationPanel, false);
-                playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
                 playerPanel2.setBackground(new Color(75,115,153));
                 playerPanel2.setVisible(true);
+
+                if (playerColorWhite.equals("White")) {
+                    playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                    playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
+                } else {
+                    playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
+                    playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                }
+
+                add(playerPanel);
                 add(playerPanel2);
+
 
                 revalidate();
                 repaint();
 
                 currentPlayer = playerWhite;
                 configurationPanel.setVisible(false);
+                logoLabel.setVisible(false);
+                titleLabel.setVisible(false);
                 playButton.setVisible(false);
             }
 
@@ -111,20 +127,13 @@ public class Game extends JPanel {
 
     public void switchTurn() {
         if(currentPlayer == playerWhite) {
-            playerPanel.stopTimer();
+            playerWhite.stopTimer();
             currentPlayer = playerBlack;
-            playerPanel2.startTimer();
         } else {
-            playerPanel2.stopTimer();
             currentPlayer = playerWhite;
-            playerPanel.startTimer();
+            playerBlack.stopTimer();
         }
-    }
-
-    public void startGame() {
-        if (currentPlayer == playerWhite) {
-            playerPanel.startTimer();
-        }
+        currentPlayer.startTimer();
     }
 
     public void paintComponent(Graphics g) {
