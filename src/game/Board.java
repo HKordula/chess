@@ -17,6 +17,7 @@ public class Board {
     public int enPassantTarget = -1;
     Game game;
     public Check check = new Check(this);
+    private boolean isGameOver = false;
 
     public Board(int startX, int startY, Game game) {
         this.startX = startX;
@@ -42,7 +43,7 @@ public class Board {
         pieces.add(new Bishop(this,true,5,7));
         pieces.add(new Knight(this,true,6,7));
         pieces.add(new Rook(this,true,7,7));
-
+//
         //BLACK
         for(int i = 0 ; i <8; i++) {
             pieces.add(new Pawn(this,false,i,1));
@@ -82,8 +83,39 @@ public class Board {
             capture(move.capture);
             game.switchTurn();
         }
-
+        updateGameState();
     }
+
+    private void updateGameState() {
+        Piece king = findKing(game.currentPlayer.isWhite());
+        if(check.isGameOver(king)) {
+            if(check.isKingChecked(new Move(this, king, king.col, king.row)))
+            {
+                System.out.println(game.currentPlayer.isWhite() ? "Black wins by Checkmate" : "White wins by Checkmate");
+            } else {
+                System.out.println("Draw by Stalemate");
+            }
+            isGameOver = true;
+        } else if (insufficientMaterial(true) && insufficientMaterial(false)) {
+            System.out.println("Draw by insufficient material");
+            isGameOver = true;
+        }
+    }
+
+    private boolean insufficientMaterial(boolean isWhite) {
+        int count = 0;
+        boolean hasBishopOrKnight = false;
+        for (Piece piece : pieces) {
+            if (piece.isWhite() == isWhite) {
+                count++;
+                if (piece instanceof Bishop || piece instanceof Knight) {
+                    hasBishopOrKnight = true;
+                }
+            }
+        }
+        return count == 1 || (count == 2 && hasBishopOrKnight);
+    }
+
     private void kingMove(Move move) {
         if(Math.abs(move.piece.col - move.postCol) >= 2) {
             Piece rook, king;
@@ -108,10 +140,6 @@ public class Board {
             move.piece.y = move.postRow * Square.SQUARE_SIZE;
             capture(move.capture);
         }
-
-
-        move.piece.isFirstMove = false;
-
 
         game.switchTurn();
     }
@@ -180,6 +208,9 @@ public class Board {
         if(game.promotionPanel.isVisible())
             return false;
         if(check.isKingChecked(move)) {
+            return false;
+        }
+        if(isGameOver) {
             return false;
         }
         return true;

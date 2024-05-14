@@ -19,7 +19,7 @@ public class Player {
         return color;
     }
 
-    public  String getBalance() {
+    public String getBalance() {
         return wins + "-" + draws + "-" + loses;
     }
 
@@ -41,5 +41,13 @@ public class Player {
 
     public CountdownTimer getCountdownTimer() {
         return countdownTimer;
+    }
+
+    public boolean isWhite() {
+        if (color.equals("White"))
+        {
+            return true;
+        }
+        return false;
     }
 }

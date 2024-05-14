@@ -102,8 +102,7 @@ public class PlayerPanel extends JPanel {
         button2.setFont(new Font("Garamond", Font.BOLD, 20));
         button2.setBorder(null);
 
-
-        button3 = new JButton("New Game");
+        button3 = new JButton("YES");
         button3.setBounds(280, 110, 120, 80);
         button3.setFocusPainted(false);
         button3.setForeground(Color.WHITE);
@@ -111,7 +110,7 @@ public class PlayerPanel extends JPanel {
         button3.setFont(new Font("Garamond", Font.BOLD, 20));
         button3.setBorder(null);
 
-        button4 = new JButton("Rematch");
+        button4 = new JButton("NO");
         button4.setBounds(410, 110, 120, 80);
         button4.setFocusPainted(false);
         button4.setForeground(Color.WHITE);
