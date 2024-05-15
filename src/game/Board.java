@@ -2,6 +2,7 @@ package game;
 
 import pieces.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -18,6 +19,9 @@ public class Board {
     Game game;
     public Check check = new Check(this);
     boolean isGameOver = false;
+    String message;
+    private JLabel messageLabel;
+    private JButton button1,button2;
 
     public Board(int startX, int startY, Game game) {
         this.startX = startX;
@@ -90,27 +94,65 @@ public class Board {
         Piece king = findKing(game.currentPlayer.isWhite());
         if(check.isGameOver(king)) {
             if(check.isKingChecked(new Move(this, king, king.col, king.row))) {
-                System.out.println(game.currentPlayer.isWhite() ? "Black wins by Checkmate" : "White wins by Checkmate");
-                game.currentPlayer.wins++;
+                message =game.currentPlayer.isWhite() ? "Black wins by Checkmate!" : "White wins by Checkmate!";
                 if (game.currentPlayer.isWhite()) {
-                    game.playerBlack.losses++;
-                } else {
                     game.playerWhite.losses++;
+                    game.playerBlack.wins++;
+                } else {
+                    game.playerBlack.losses++;
+                    game.playerWhite.wins++;
                 }
             } else {
-                System.out.println("Draw by Stalemate");
+                message ="Draw by Stalemate!";
                 game.playerWhite.draws++;
                 game.playerBlack.draws++;
             }
             isGameOver = true;
         } else if (insufficientMaterial(true) && insufficientMaterial(false)) {
-            System.out.println("Draw by insufficient material");
+            message="Draw by insufficient material!";
             game.playerWhite.draws++;
             game.playerBlack.draws++;
             isGameOver = true;
         }
-        System.out.println("Black player balance: " + game.playerBlack.getBalance());
-        System.out.println("White player balance: " + game.playerWhite.getBalance());
+        if(isGameOver) {
+            displayGameOverPanel();
+        }
+    }
+
+    private void displayGameOverPanel() {
+        messageLabel = new JLabel(message);
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        messageLabel.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 90, startY + 300, 550, 100);
+        messageLabel.setVisible(true);
+
+        button1 = new JButton("New Game");
+        button1.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 103, startY + 410, 120, 80);
+        button1.setFocusPainted(false);
+        button1.setForeground(Color.WHITE);
+        button1.setBackground(Color.DARK_GRAY);
+        button1.setFont(new Font("Garamond", Font.BOLD, 20));
+        button1.setBorder(null);
+
+        button2 = new JButton("Rematch");
+        button2.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 326, startY + 410, 120, 80);
+        button2.setFocusPainted(false);
+        button2.setForeground(Color.WHITE);
+        button2.setBackground(Color.DARK_GRAY);
+        button2.setFont(new Font("Garamond", Font.BOLD, 20));
+        button2.setBorder(null);
+
+        game.setLayout(null);
+
+        game.add(messageLabel);
+        game.add(button1);
+        game.add(button2);
+
+        game.playerPanel.updateBalanceDisplay();
+        game.playerPanel2.updateBalanceDisplay();
+
+        game.revalidate();
+        game.repaint();
+
     }
 
     private boolean insufficientMaterial(boolean isWhite) {

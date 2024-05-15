@@ -79,16 +79,20 @@ public class Game extends JPanel {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String playerNameWhite = configurationPanel.getPlayerName("Player1");
-                String playerColorWhite = configurationPanel.getPlayerColor("Player1");
-                playerWhite = new Player(playerNameWhite, playerColorWhite);
-                playerWhite.wins++;
-                System.out.println(playerWhite.name+ " " + playerWhite.color);
+                String player1Color = configurationPanel.getPlayerColor("Player1");
+                String player1Name = configurationPanel.getPlayerName("Player1");
+                String player2Name = configurationPanel.getPlayerName("Player2");
+                if(player1Color.equals("White")) {
+                    playerWhite = new Player(player1Name, "White");
+                    playerBlack = new Player(player2Name, "Black");
+                } else {
+                    playerWhite = new Player(player2Name, "White");
+                    playerBlack = new Player(player1Name, "Black");
+                }
 
-                String playerNameBlack = configurationPanel.getPlayerName("Player2");
-                String playerColorBlack = configurationPanel.getPlayerColor("Player2");
-                playerBlack = new Player(playerNameBlack, playerColorBlack);
-                System.out.println(playerBlack.name+ " " + playerBlack.color);
+                playerWhite.wins++;
+                System.out.println(playerWhite.name+ " " + playerWhite.color + " " + playerWhite.getBalance());
+                System.out.println(playerBlack.name+ " " + playerBlack.color + " " + playerBlack.getBalance());
 
                 playerPanel = new PlayerPanel(playerWhite, board, board.game, configurationPanel, true);
                 playerPanel.setBackground(new Color(75,115,153));
@@ -98,7 +102,7 @@ public class Game extends JPanel {
                 playerPanel2.setBackground(new Color(75,115,153));
                 playerPanel2.setVisible(true);
 
-                if (playerColorWhite.equals("White")) {
+                if (player1Color.equals("White")) {
                     playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
                     playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
                 } else {
@@ -108,7 +112,6 @@ public class Game extends JPanel {
 
                 add(playerPanel);
                 add(playerPanel2);
-
 
                 revalidate();
                 repaint();

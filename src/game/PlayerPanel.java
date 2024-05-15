@@ -11,7 +11,6 @@ import java.util.TimeZone;
 public class PlayerPanel extends JPanel {
     Player player;
     Board board;
-    Game game;
     private JLabel playerName;
     private JLabel gameBalance;
     private JLabel timeLabel;
@@ -21,12 +20,11 @@ public class PlayerPanel extends JPanel {
     private JButton button2;
     private JButton button3;
     private JButton button4;
-    private ConfigurationPanel configurationPanel;
 
     public PlayerPanel(Player player, Board board, Game game, ConfigurationPanel configurationPanel, boolean startTimer) {
         this.player = player;
         this.board = board;
-        this.configurationPanel = configurationPanel;
+
 
         Font font = new Font("Arial", Font.BOLD, 30);
 
@@ -179,5 +177,9 @@ public class PlayerPanel extends JPanel {
                 }
             }
         });
+    }
+
+    public void updateBalanceDisplay() {
+        gameBalance.setText(player.getBalance());
     }
 }
