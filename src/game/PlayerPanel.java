@@ -10,6 +10,8 @@ import java.util.TimeZone;
 
 public class PlayerPanel extends JPanel {
     Player player;
+    Board board;
+    Game game;
     private JLabel playerName;
     private JLabel gameBalance;
     private JLabel timeLabel;
@@ -21,8 +23,9 @@ public class PlayerPanel extends JPanel {
     private JButton button4;
     private ConfigurationPanel configurationPanel;
 
-    public PlayerPanel(Player player, ConfigurationPanel configurationPanel, boolean startTimer) {
+    public PlayerPanel(Player player, Board board, Game game, ConfigurationPanel configurationPanel, boolean startTimer) {
         this.player = player;
+        this.board = board;
         this.configurationPanel = configurationPanel;
 
         Font font = new Font("Arial", Font.BOLD, 30);
@@ -123,5 +126,58 @@ public class PlayerPanel extends JPanel {
         add(button3);
         add(button4);
 
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!board.isGameOver) {
+                    board.isGameOver = true;
+
+                    if (player.isWhite()) {
+                        game.playerWhite.losses++;
+                        game.playerBlack.wins++;
+                    } else {
+                        game.playerBlack.losses++;
+                        game.playerWhite.wins++;
+                    }
+                    game.playerPanel.gameBalance.setText(game.playerWhite.getBalance());
+                    game.playerPanel2.gameBalance.setText(game.playerBlack.getBalance());
+                }
+            }
+        });
+
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!board.isGameOver) {
+                    game.drawRequested = true;
+                    game.requestingPlayer = player;
+                    button3.setForeground(Color.GREEN);
+                    button4.setForeground(Color.RED);
+                }
+            }
+        });
+
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!board.isGameOver && game.drawRequested && game.requestingPlayer != player) {
+                    board.isGameOver = true;
+                    game.playerWhite.draws++;
+                    game.playerBlack.draws++;
+                    game.playerPanel.gameBalance.setText(game.playerWhite.getBalance());
+                    game.playerPanel2.gameBalance.setText(game.playerBlack.getBalance());
+                }
+            }
+        });
+
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!board.isGameOver && game.drawRequested && game.requestingPlayer != player) {
+                    game.drawRequested = false;
+                    game.requestingPlayer = null;
+                }
+            }
+        });
     }
 }

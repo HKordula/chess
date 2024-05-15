@@ -17,12 +17,13 @@ public class Board {
     public int enPassantTarget = -1;
     Game game;
     public Check check = new Check(this);
-    private boolean isGameOver = false;
+    boolean isGameOver = false;
 
     public Board(int startX, int startY, Game game) {
         this.startX = startX;
         this.startY = startY;
         this.game = game;
+
         setPieces();
     }
 
@@ -43,7 +44,6 @@ public class Board {
         pieces.add(new Bishop(this,true,5,7));
         pieces.add(new Knight(this,true,6,7));
         pieces.add(new Rook(this,true,7,7));
-//
         //BLACK
         for(int i = 0 ; i <8; i++) {
             pieces.add(new Pawn(this,false,i,1));
@@ -89,17 +89,28 @@ public class Board {
     private void updateGameState() {
         Piece king = findKing(game.currentPlayer.isWhite());
         if(check.isGameOver(king)) {
-            if(check.isKingChecked(new Move(this, king, king.col, king.row)))
-            {
+            if(check.isKingChecked(new Move(this, king, king.col, king.row))) {
                 System.out.println(game.currentPlayer.isWhite() ? "Black wins by Checkmate" : "White wins by Checkmate");
+                game.currentPlayer.wins++;
+                if (game.currentPlayer.isWhite()) {
+                    game.playerBlack.losses++;
+                } else {
+                    game.playerWhite.losses++;
+                }
             } else {
                 System.out.println("Draw by Stalemate");
+                game.playerWhite.draws++;
+                game.playerBlack.draws++;
             }
             isGameOver = true;
         } else if (insufficientMaterial(true) && insufficientMaterial(false)) {
             System.out.println("Draw by insufficient material");
+            game.playerWhite.draws++;
+            game.playerBlack.draws++;
             isGameOver = true;
         }
+        System.out.println("Black player balance: " + game.playerBlack.getBalance());
+        System.out.println("White player balance: " + game.playerWhite.getBalance());
     }
 
     private boolean insufficientMaterial(boolean isWhite) {
@@ -187,7 +198,6 @@ public class Board {
         } else {
             pieces.add(new Queen(this, move.piece.isWhite(), move.postCol, move.postRow));
         }
-
     }
 
     public void capture(Piece piece) {
@@ -205,14 +215,10 @@ public class Board {
             return false;
         if (move.piece.moveCollision(move.postCol, move.postRow))
             return false;
-        if(game.promotionPanel.isVisible())
+        if(check.isKingChecked(move))
             return false;
-        if(check.isKingChecked(move)) {
+        if(isGameOver)
             return false;
-        }
-        if(isGameOver) {
-            return false;
-        }
         return true;
     }
     public boolean sameTeam(Piece p1, Piece p2) {

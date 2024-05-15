@@ -3,7 +3,7 @@ package game;
 public class Player {
     String name;
     String color;
-    int wins, draws, loses = 0;
+    int wins, draws, losses = 0;
     private CountdownTimer countdownTimer;
 
     public Player(String name, String color) {
@@ -20,7 +20,7 @@ public class Player {
     }
 
     public String getBalance() {
-        return wins + "-" + draws + "-" + loses;
+        return wins + "-" + draws + "-" + losses;
     }
 
     public void startTimer() {

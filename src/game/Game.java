@@ -19,7 +19,8 @@ public class Game extends JPanel {
     Player currentPlayer;
     private JLabel logoLabel;
     private JLabel titleLabel;
-
+    boolean drawRequested = false;
+    Player requestingPlayer = null;
 
     public Game() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -89,11 +90,11 @@ public class Game extends JPanel {
                 playerBlack = new Player(playerNameBlack, playerColorBlack);
                 System.out.println(playerBlack.name+ " " + playerBlack.color);
 
-                playerPanel = new PlayerPanel(playerWhite, configurationPanel, true);
+                playerPanel = new PlayerPanel(playerWhite, board, board.game, configurationPanel, true);
                 playerPanel.setBackground(new Color(75,115,153));
                 playerPanel.setVisible(true);
 
-                playerPanel2 = new PlayerPanel(playerBlack, configurationPanel, false);
+                playerPanel2 = new PlayerPanel(playerBlack, board, board.game, configurationPanel, false);
                 playerPanel2.setBackground(new Color(75,115,153));
                 playerPanel2.setVisible(true);
 
