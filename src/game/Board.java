@@ -4,6 +4,8 @@ import pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Board {
@@ -119,7 +121,7 @@ public class Board {
         }
     }
 
-    private void displayGameOverPanel() {
+    public void displayGameOverPanel() {
         messageLabel = new JLabel(message);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 30));
         messageLabel.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 90, startY + 300, 550, 100);
@@ -132,6 +134,16 @@ public class Board {
         button1.setBackground(Color.DARK_GRAY);
         button1.setFont(new Font("Garamond", Font.BOLD, 20));
         button1.setBorder(null);
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.resetGame();
+                button1.setVisible(false);
+                button2.setVisible(false);
+                messageLabel.setVisible(false);
+            }
+        });
+
 
         button2 = new JButton("Rematch");
         button2.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 326, startY + 410, 120, 80);
@@ -140,6 +152,20 @@ public class Board {
         button2.setBackground(Color.DARK_GRAY);
         button2.setFont(new Font("Garamond", Font.BOLD, 20));
         button2.setBorder(null);
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                button1.setVisible(false);
+                button2.setVisible(false);
+                messageLabel.setVisible(false);
+                isGameOver = false;
+                pieces.clear();
+                setPieces();
+                enPassantTarget = -1;
+                game.revalidate();
+                game.repaint();
+            }
+        });
 
         game.setLayout(null);
 

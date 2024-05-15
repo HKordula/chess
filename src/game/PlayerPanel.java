@@ -133,12 +133,16 @@ public class PlayerPanel extends JPanel {
                     if (player.isWhite()) {
                         game.playerWhite.losses++;
                         game.playerBlack.wins++;
+                        board.message = "Black wins by surrendering!";
                     } else {
                         game.playerBlack.losses++;
                         game.playerWhite.wins++;
+                        board.message = "White wins by surrendering!";
                     }
                     game.playerPanel.gameBalance.setText(game.playerWhite.getBalance());
                     game.playerPanel2.gameBalance.setText(game.playerBlack.getBalance());
+
+                    board.displayGameOverPanel();
                 }
             }
         });
@@ -164,6 +168,8 @@ public class PlayerPanel extends JPanel {
                     game.playerBlack.draws++;
                     game.playerPanel.gameBalance.setText(game.playerWhite.getBalance());
                     game.playerPanel2.gameBalance.setText(game.playerBlack.getBalance());
+                    board.message = "Draw by decission!";
+                    board.displayGameOverPanel();
                 }
             }
         });

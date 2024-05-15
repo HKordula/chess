@@ -106,8 +106,8 @@ public class Game extends JPanel {
                     playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
                     playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
                 } else {
-                    playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY , 550, 200);
-                    playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                    playerPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 600, 550, 200);
+                    playerPanel2.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 200);
                 }
 
                 add(playerPanel);
@@ -116,6 +116,7 @@ public class Game extends JPanel {
                 revalidate();
                 repaint();
 
+                board.isGameOver = false;
                 currentPlayer = playerWhite;
                 configurationPanel.setVisible(false);
                 logoLabel.setVisible(false);
@@ -148,5 +149,56 @@ public class Game extends JPanel {
 
         g2d.setColor(new Color(235,232,210));
         g2d.fillRect(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 800);
+    }
+
+    public void swapPlayerPanels(JPanel playerPanel1, JPanel playerPanel2) {
+        Rectangle bounds1 = playerPanel1.getBounds();
+        playerPanel1.setBounds(playerPanel2.getBounds());
+        playerPanel2.setBounds(bounds1);
+    }
+
+    public void resetGame() {
+
+        // Reset the board
+        board.pieces.clear();
+        board.setPieces();
+        mouse = new Mouse(board, this);
+        board.enPassantTarget = -1;
+
+        // Reset the players
+        playerWhite = new Player(configurationPanel.getPlayerName("Player1"), "White");
+        playerBlack = new Player(configurationPanel.getPlayerName("Player2"), "Black");
+        currentPlayer = playerWhite;
+
+        // Remove the old player panels
+        this.remove(playerPanel);
+        this.remove(playerPanel2);
+
+        // Reset the player panels
+        playerPanel = new PlayerPanel(playerWhite, board, this, configurationPanel, true);
+        playerPanel2 = new PlayerPanel(playerBlack, board, this, configurationPanel, false);
+
+        // Add the new player panels
+        this.add(playerPanel);
+        this.add(playerPanel2);
+
+        // Reset the configuration panel
+        configurationPanel.setVisible(true);
+
+        // Reset the logo and title
+        logoLabel.setVisible(true);
+        titleLabel.setVisible(true);
+
+        // Reset any other game-related variables
+        drawRequested = false;
+        requestingPlayer = null;
+
+        // Create and add the play button
+        JButton playButton = createPlayButton();
+        this.add(playButton);
+
+        // Redraw the game
+        revalidate();
+        repaint();
     }
 }
