@@ -1,6 +1,7 @@
 package game;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +17,10 @@ public class PlayerPanel extends JPanel {
     private JLabel timeLabel;
     private JLabel imageLabel;
     private ImageIcon playerImage;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
+    public JButton button1;
+    public JButton button2;
+    public JButton button3;
+    public JButton button4;
 
     public PlayerPanel(Player player, Board board, Game game, ConfigurationPanel configurationPanel, boolean startTimer) {
         this.player = player;
@@ -42,7 +43,7 @@ public class PlayerPanel extends JPanel {
         gameBalance = new JLabel(player.getBalance());
         gameBalance.setFont(font);
         gameBalance.setForeground(new Color(235, 232, 210));
-        gameBalance.setBounds(305, 10, 100, 100);
+        gameBalance.setBounds(430, 10, 100, 100);
 
         timeLabel = new JLabel();
         timeLabel.setFont(font);
@@ -153,8 +154,14 @@ public class PlayerPanel extends JPanel {
                 if (!board.isGameOver) {
                     game.drawRequested = true;
                     game.requestingPlayer = player;
-                    button3.setForeground(Color.GREEN);
-                    button4.setForeground(Color.RED);
+
+                    if (player == game.playerWhite) {
+                        game.playerPanel2.button3.setBorder(new LineBorder(Color.GREEN, 2));
+                        game.playerPanel2.button4.setBorder(new LineBorder(Color.RED, 2));
+                    } else if (player == game.playerBlack) {
+                        game.playerPanel.button3.setBorder(new LineBorder(Color.GREEN, 2));
+                        game.playerPanel.button4.setBorder(new LineBorder(Color.RED, 2));
+                    }
                 }
             }
         });
@@ -178,8 +185,7 @@ public class PlayerPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!board.isGameOver && game.drawRequested && game.requestingPlayer != player) {
-                    game.drawRequested = false;
-                    game.requestingPlayer = null;
+                    game.cancelDrawRequest();
                 }
             }
         });
@@ -187,5 +193,10 @@ public class PlayerPanel extends JPanel {
 
     public void updateBalanceDisplay() {
         gameBalance.setText(player.getBalance());
+    }
+
+    public void updatePlayerImage() {
+        playerImage = new ImageIcon(getClass().getResource(player.getColor().equals("White") ? "/images/Light/Pawn.png" : "/images/Dark/Pawn.png"));
+        imageLabel.setIcon(playerImage);
     }
 }

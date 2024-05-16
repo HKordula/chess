@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public abstract class Piece {
-    private final boolean isWhite;
+    private boolean isWhite;
     public BufferedImage image;
     public int x,y;
     public int col,row;
@@ -37,6 +37,9 @@ public abstract class Piece {
     }
     public boolean isWhite() {
         return isWhite;
+    }
+    public void setIsWhite(boolean isWhite) {
+        this.isWhite = isWhite;
     }
     public boolean canMove(int col, int row) {
         return true;

@@ -44,10 +44,10 @@ public class Player {
     }
 
     public boolean isWhite() {
-        if (color.equals("White"))
-        {
-            return true;
-        }
-        return false;
+        return color.equals("White");
+    }
+
+    public void setColor(String player2Color) {
+        this.color = player2Color;
     }
 }

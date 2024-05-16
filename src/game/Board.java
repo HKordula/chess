@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import static java.util.Collections.swap;
+
 public class Board {
     final int COLUMNS = 8;
     final int ROWS = 8;
@@ -90,6 +92,7 @@ public class Board {
             game.switchTurn();
         }
         updateGameState();
+        game.cancelDrawRequest();
     }
 
     private void updateGameState() {
@@ -124,7 +127,8 @@ public class Board {
     public void displayGameOverPanel() {
         messageLabel = new JLabel(message);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        messageLabel.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 90, startY + 300, 550, 100);
+        messageLabel.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), startY + 300, 550, 100);
+        messageLabel.setHorizontalAlignment(JLabel.CENTER);
         messageLabel.setVisible(true);
 
         button1 = new JButton("New Game");
@@ -159,9 +163,12 @@ public class Board {
                 button2.setVisible(false);
                 messageLabel.setVisible(false);
                 isGameOver = false;
+                game.cancelDrawRequest();
                 pieces.clear();
                 setPieces();
                 enPassantTarget = -1;
+
+                game.currentPlayer = game.playerWhite;
                 game.revalidate();
                 game.repaint();
             }
@@ -308,6 +315,11 @@ public class Board {
         }
         return null;
     }
+    public void swapPlayerColors() {
+        for(Piece piece : pieces) {
+            piece.setIsWhite(!piece.isWhite());
+        }
+    }
 
     public void draw(Graphics2D board) {
         for (int i = 0; i < ROWS; i++) {
@@ -355,3 +367,4 @@ public class Board {
         }
     }
 }
+

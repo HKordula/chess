@@ -90,10 +90,6 @@ public class Game extends JPanel {
                     playerBlack = new Player(player1Name, "Black");
                 }
 
-                playerWhite.wins++;
-                System.out.println(playerWhite.name+ " " + playerWhite.color + " " + playerWhite.getBalance());
-                System.out.println(playerBlack.name+ " " + playerBlack.color + " " + playerBlack.getBalance());
-
                 playerPanel = new PlayerPanel(playerWhite, board, board.game, configurationPanel, true);
                 playerPanel.setBackground(new Color(75,115,153));
                 playerPanel.setVisible(true);
@@ -151,18 +147,20 @@ public class Game extends JPanel {
         g2d.fillRect(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY, 550, 800);
     }
 
-    public void swapPlayerPanels(JPanel playerPanel1, JPanel playerPanel2) {
-        Rectangle bounds1 = playerPanel1.getBounds();
-        playerPanel1.setBounds(playerPanel2.getBounds());
-        playerPanel2.setBounds(bounds1);
+    public void cancelDrawRequest() {
+        drawRequested = false;
+        requestingPlayer = null;
+        playerPanel.button3.setBorder(null);
+        playerPanel.button4.setBorder(null);
+        playerPanel2.button3.setBorder(null);
+        playerPanel2.button4.setBorder(null);
     }
 
     public void resetGame() {
 
         // Reset the board
-        board.pieces.clear();
+        Board.pieces.clear();
         board.setPieces();
-        mouse = new Mouse(board, this);
         board.enPassantTarget = -1;
 
         // Reset the players
@@ -190,8 +188,7 @@ public class Game extends JPanel {
         titleLabel.setVisible(true);
 
         // Reset any other game-related variables
-        drawRequested = false;
-        requestingPlayer = null;
+        cancelDrawRequest();
 
         // Create and add the play button
         JButton playButton = createPlayButton();
