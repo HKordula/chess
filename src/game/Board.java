@@ -8,20 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static java.util.Collections.swap;
-
 public class Board {
     final int COLUMNS = 8;
     final int ROWS = 8;
-    final private Square[][] squares = new Square[ROWS][COLUMNS];
+    private final Square[][] squares = new Square[ROWS][COLUMNS];
     public final int startX;
     public final int startY;
-    public static ArrayList<Piece> pieces = new ArrayList<>();
-
-    public Piece selectedPiece;
+    public static final ArrayList<Piece> pieces = new ArrayList<>();
+    Piece selectedPiece;
     public int enPassantTarget = -1;
-    Game game;
-    public Check check = new Check(this);
+    final Game game;
+    public final Check check = new Check(this);
     boolean isGameOver = false;
     String message;
     private JLabel messageLabel;
@@ -52,6 +49,7 @@ public class Board {
         pieces.add(new Bishop(this,true,5,7));
         pieces.add(new Knight(this,true,6,7));
         pieces.add(new Rook(this,true,7,7));
+
         //BLACK
         for(int i = 0 ; i <8; i++) {
             pieces.add(new Pawn(this,false,i,1));
@@ -148,7 +146,6 @@ public class Board {
             }
         });
 
-
         button2 = new JButton("Rematch");
         button2.setBounds(startX + COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2) + 326, startY + 410, 120, 80);
         button2.setFocusPainted(false);
@@ -162,13 +159,14 @@ public class Board {
                 button1.setVisible(false);
                 button2.setVisible(false);
                 messageLabel.setVisible(false);
+
                 isGameOver = false;
                 game.cancelDrawRequest();
                 pieces.clear();
                 setPieces();
                 enPassantTarget = -1;
-
                 game.currentPlayer = game.playerWhite;
+
                 game.revalidate();
                 game.repaint();
             }
@@ -180,12 +178,11 @@ public class Board {
         game.add(button1);
         game.add(button2);
 
-        game.playerPanel.updateBalanceDisplay();
-        game.playerPanel2.updateBalanceDisplay();
+        game.playerPanel[0].updateBalanceDisplay();
+        game.playerPanel[1].updateBalanceDisplay();
 
         game.revalidate();
         game.repaint();
-
     }
 
     private boolean insufficientMaterial(boolean isWhite) {
@@ -226,7 +223,6 @@ public class Board {
             move.piece.y = move.postRow * Square.SQUARE_SIZE;
             capture(move.capture);
         }
-
         game.switchTurn();
     }
 
@@ -241,7 +237,6 @@ public class Board {
         } else {
             enPassantTarget = -1;
         }
-
         if(selectedPiece.isWhite() && move.postRow == 0 || !selectedPiece.isWhite() && move.postRow == 7) {
             Move promotionMove = new Move(this, selectedPiece, move.postCol, move.postRow);
             game.displayPromotionPanel(promotionMove);
@@ -256,8 +251,6 @@ public class Board {
         move.piece.isFirstMove = false;
 
         capture(move.capture);
-
-
     }
 
     public void promotePawn(Move move, String PieceType) {
@@ -296,6 +289,7 @@ public class Board {
             return false;
         return true;
     }
+
     public boolean sameTeam(Piece p1, Piece p2) {
         if (p1 == null || p2 == null) {
             return false;
@@ -314,11 +308,6 @@ public class Board {
             }
         }
         return null;
-    }
-    public void swapPlayerColors() {
-        for(Piece piece : pieces) {
-            piece.setIsWhite(!piece.isWhite());
-        }
     }
 
     public void draw(Graphics2D board) {
@@ -341,8 +330,6 @@ public class Board {
                 squares[i][j].draw(board);
             }
         }
-
-
 
         if (selectedPiece != null) {
             for(int i = 0 ; i < ROWS; i++) {
@@ -367,4 +354,3 @@ public class Board {
         }
     }
 }
-

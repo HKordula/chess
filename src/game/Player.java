@@ -1,8 +1,8 @@
 package game;
 
 public class Player {
-    String name;
-    String color;
+    private final String name;
+    private final String color;
     int wins, draws, losses = 0;
 
     public Player(String name, String color) {
@@ -24,9 +24,5 @@ public class Player {
 
     public boolean isWhite() {
         return color.equals("White");
-    }
-
-    public void setColor(String player2Color) {
-        this.color = player2Color;
     }
 }

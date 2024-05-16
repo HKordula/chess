@@ -3,15 +3,16 @@ package pieces;
 import game.Board;
 
 public class Queen extends Piece{
+
     public Queen(Board board, boolean isWhite, int col, int row) {
         super(board, isWhite, col , row);
         if(isWhite()) {
             image=getImage("/images/Light/Queen");
-        }
-        else {
+        } else {
             image=getImage("/images/Dark/Queen");
         }
     }
+
     public boolean canMove(int col, int row) {
         return Math.abs(col - this.col) == Math.abs(row -this.row) ||  (col == this.col || row ==this.row);
     }
@@ -58,7 +59,6 @@ public class Queen extends Piece{
                     if (board.getPiece(this.col + i, this.row + i) != null)
                         return true;
         }
-
         return false;
     }
 }

@@ -3,7 +3,7 @@ package game;
 import pieces.*;
 
 public class Check {
-    Board board;
+    private final Board board;
 
     public Check(Board board) {
         this.board = board;
@@ -41,7 +41,6 @@ public class Check {
             if(kingCol + (i * colVal) == col && kingRow + (i * rowVal) == row) {
                 break;
             }
-
             Piece piece = board.getPiece(kingCol + (i * colVal) ,kingRow + (i * rowVal));
             if(piece != null && piece != board.selectedPiece) {
                 if(!board.sameTeam(piece, king) && (piece instanceof Rook || piece instanceof Queen)) {
@@ -58,7 +57,6 @@ public class Check {
             if(kingCol - (i * colVal) == col && kingRow - (i * rowVal) == row) {
                 break;
             }
-
             Piece piece = board.getPiece(kingCol - (i * colVal) ,kingRow - (i * rowVal));
             if(piece != null && piece != board.selectedPiece) {
                 if(!board.sameTeam(piece, king) && (piece instanceof Bishop || piece instanceof Queen)) {
@@ -111,7 +109,7 @@ public class Check {
     }
 
     public boolean isGameOver(Piece king) {
-        for(Piece piece : board.pieces) {
+        for(Piece piece : Board.pieces) {
             if(board.sameTeam(piece, king)) {
                 board.selectedPiece = piece == king ? king : null;
                 for(int row = 0; row < board.ROWS ; row++) {

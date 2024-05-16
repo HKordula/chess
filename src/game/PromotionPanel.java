@@ -6,12 +6,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Objects;
 
 public class PromotionPanel extends JPanel {
     private final Board board;
-    Move move;
-    Game game;
-    private String color;
+    private Move move;
+    private final Game game;
 
     public PromotionPanel(Board board, Game game) {
         this.board = board;
@@ -23,7 +23,7 @@ public class PromotionPanel extends JPanel {
 
     private void addPieceImage(String imagePath, String pieceType) {
         try {
-            ImageIcon imageIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream(imagePath)));
+            ImageIcon imageIcon = new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath))));
             JLabel imageLabel = new JLabel(imageIcon);
             imageLabel.addMouseListener(new MouseAdapter() {
                 @Override
@@ -44,7 +44,6 @@ public class PromotionPanel extends JPanel {
 
     public void setMove(Move move, String color) {
         this.move = move;
-        this.color = color;
         removeAll();
         addPieceImage("/images/" + color + "/Queen.png", "Queen");
         addPieceImage("/images/" + color + "/Rook.png", "Rook");

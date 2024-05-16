@@ -4,15 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Random;
 
 public class ConfigurationPanel extends JPanel {
-    private JTextField player1Name;
-    private JComboBox<String> player1Color;
-    private JTextField player2Name;
-    private JComboBox<String> player2Color;
+    private final JTextField[] playerName = new JTextField[2];
+    private final JComboBox<String>[] playerColor = new JComboBox[2];
 
     public ConfigurationPanel() {
         setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -30,19 +26,19 @@ public class ConfigurationPanel extends JPanel {
         label1.setFont(font);
         player1Panel.add(label1);
 
-        player1Name = new JTextField();
-        player1Name.setPreferredSize(new Dimension(120,40));
-        player1Name.setFont(font);
-        player1Panel.add(player1Name);
+        playerName[0] = new JTextField();
+        playerName[0].setPreferredSize(new Dimension(120,40));
+        playerName[0].setFont(font);
+        player1Panel.add(playerName[0]);
 
         JLabel label2 = new JLabel("Color:");
         label2.setFont(font);
         player1Panel.add(label2);
 
-        player1Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
-        player1Color.setFont(font);
-        player1Color.setBackground(Color.white);
-        player1Panel.add(player1Color);
+        playerColor[0] = new JComboBox<>(new String[]{"White", "Black", "Random"});
+        playerColor[0].setFont(font);
+        playerColor[0].setBackground(Color.white);
+        player1Panel.add(playerColor[0]);
         add(player1Panel);
 
         JPanel player2Panel = new JPanel(new GridLayout(1, 2,15,40));
@@ -52,53 +48,53 @@ public class ConfigurationPanel extends JPanel {
         label3.setFont(font);
         player2Panel.add(label3);
 
-        player2Name = new JTextField();
-        player2Name.setPreferredSize(new Dimension(120,40));
-        player2Name.setFont(font);
-        player2Panel.add(player2Name);
+        playerName[1] = new JTextField();
+        playerName[1].setPreferredSize(new Dimension(120,40));
+        playerName[1].setFont(font);
+        player2Panel.add(playerName[1]);
 
         JLabel label4 = new JLabel("Color:");
         label4.setFont(font);
         player2Panel.add(label4);
 
-        player2Color = new JComboBox<>(new String[]{"White", "Black", "Random"});
-        player2Color.setSelectedItem("Black");
-        player2Color.setFont(font);
-        player2Color.setBackground(Color.white);
-        player2Panel.add(player2Color);
+        playerColor[1] = new JComboBox<>(new String[]{"White", "Black", "Random"});
+        playerColor[1].setSelectedItem("Black");
+        playerColor[1].setFont(font);
+        playerColor[1].setBackground(Color.white);
+        player2Panel.add(playerColor[1]);
         add(player2Panel);
 
-        player1Color.addActionListener(new ActionListener() {
+        playerColor[0].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedColor = (String) player1Color.getSelectedItem();
+                String selectedColor = (String) playerColor[0].getSelectedItem();
                 switch (selectedColor) {
                     case "White":
-                        player2Color.setSelectedItem("Black");
+                        playerColor[1].setSelectedItem("Black");
                         break;
                     case "Black":
-                        player2Color.setSelectedItem("White");
+                        playerColor[1].setSelectedItem("White");
                         break;
                     case "Random":
-                        player2Color.setSelectedItem("Random");
+                        playerColor[1].setSelectedItem("Random");
                         break;
                 }
             }
         });
 
-        player2Color.addActionListener(new ActionListener() {
+        playerColor[1].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedColor = (String) player2Color.getSelectedItem();
+                String selectedColor = (String) playerColor[1].getSelectedItem();
                 switch (selectedColor) {
                     case "White":
-                        player1Color.setSelectedItem("Black");
+                        playerColor[0].setSelectedItem("Black");
                         break;
                     case "Black":
-                        player1Color.setSelectedItem("White");
+                        playerColor[0].setSelectedItem("White");
                         break;
                     case "Random":
-                        player1Color.setSelectedItem("Random");
+                        playerColor[0].setSelectedItem("Random");
                         break;
                 }
             }
@@ -108,12 +104,12 @@ public class ConfigurationPanel extends JPanel {
     public String getPlayerName(String player) {
         String playerName;
         if(player.equals("Player1")) {
-            playerName = player1Name.getText();
+            playerName = this.playerName[0].getText();
             if(playerName.isEmpty()) {
                 playerName = "Player 1";
             }
         } else {
-            playerName = player2Name.getText();
+            playerName = this.playerName[1].getText();
             if(playerName.isEmpty()) {
                 playerName = "Player 2";
             }
@@ -124,15 +120,15 @@ public class ConfigurationPanel extends JPanel {
     public String getPlayerColor(String player) {
         String selectedColor;
         if(player.equals("Player1")) {
-            selectedColor = (String) player1Color.getSelectedItem();
+            selectedColor = (String) playerColor[0].getSelectedItem();
             if(selectedColor.equals("Random")) {
                 selectedColor = new Random().nextBoolean() ? "White" : "Black";
-                player2Color.setSelectedItem(selectedColor.equals("White") ? "Black" : "White");
+                playerColor[1].setSelectedItem(selectedColor.equals("White") ? "Black" : "White");
             }
         } else {
-            selectedColor = (String) player2Color.getSelectedItem();
+            selectedColor = (String) playerColor[1].getSelectedItem();
             if(selectedColor.equals("Random")) {
-                selectedColor = player1Color.getSelectedItem().equals("White") ? "Black" : "White";
+                selectedColor = playerColor[0].getSelectedItem().equals("White") ? "Black" : "White";
             }
         }
         return selectedColor;

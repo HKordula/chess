@@ -4,9 +4,8 @@ import pieces.Piece;
 
 public class Move {
     int preCol, preRow;
-    int postCol,postRow;
-    public Piece piece;
-    Piece capture;
+    int postCol, postRow;
+    Piece piece, capture;
 
     public Move(Board board, Piece piece, int postCol, int postRow) {
         this.preCol = piece.col;
