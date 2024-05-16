@@ -13,9 +13,6 @@ public class ConfigurationPanel extends JPanel {
     private JComboBox<String> player1Color;
     private JTextField player2Name;
     private JComboBox<String> player2Color;
-    JCheckBox timeCheckBox;
-    JSpinner hoursSpinner;
-    JSpinner minutesSpinner;
 
     public ConfigurationPanel() {
         setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -70,48 +67,6 @@ public class ConfigurationPanel extends JPanel {
         player2Color.setBackground(Color.white);
         player2Panel.add(player2Color);
         add(player2Panel);
-
-        JPanel timePanel = new JPanel(new GridLayout(1, 2,14,40));
-        timePanel.setBackground(new Color(235,232,210));
-
-        JLabel label5 = new JLabel("Time:");
-        label5.setFont(font);
-        timePanel.add(label5);
-
-        timeCheckBox = new JCheckBox();
-        timeCheckBox.setPreferredSize(new Dimension(60,40));
-        timeCheckBox.setFont(font);
-        timeCheckBox.setBackground(new Color(235,232,210));
-        timePanel.add(timeCheckBox);
-
-        JLabel label6 = new JLabel("Hours:");
-        label6.setFont(font);
-        timePanel.add(label6);
-
-        hoursSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 24, 1));
-        hoursSpinner.setEnabled(false);
-        hoursSpinner.setFont(font);
-        timePanel.add(hoursSpinner);
-
-        JLabel label7 = new JLabel("Minutes:");
-        label7.setFont(font);
-        timePanel.add(label7);
-
-        minutesSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 59, 1));
-        minutesSpinner.setEnabled(false);
-        minutesSpinner.setFont(font);
-        timePanel.add(minutesSpinner);
-
-        add(timePanel);
-
-        timeCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                boolean selected = e.getStateChange() == ItemEvent.SELECTED;
-                hoursSpinner.setEnabled(selected);
-                minutesSpinner.setEnabled(selected);
-            }
-        });
 
         player1Color.addActionListener(new ActionListener() {
             @Override

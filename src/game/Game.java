@@ -39,7 +39,7 @@ public class Game extends JPanel {
         add(promotionPanel);
 
         configurationPanel = new ConfigurationPanel();
-        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 300, 550, 180);
+        configurationPanel.setBounds(board.startX + board.COLUMNS * Square.SQUARE_SIZE + (Square.SQUARE_SIZE / 2), board.startY + 333, 550, 180);
         configurationPanel.setVisible(true);
         add(configurationPanel);
 
@@ -90,11 +90,11 @@ public class Game extends JPanel {
                     playerBlack = new Player(player1Name, "Black");
                 }
 
-                playerPanel = new PlayerPanel(playerWhite, board, board.game, configurationPanel, true);
+                playerPanel = new PlayerPanel(playerWhite, board, board.game, configurationPanel);
                 playerPanel.setBackground(new Color(75,115,153));
                 playerPanel.setVisible(true);
 
-                playerPanel2 = new PlayerPanel(playerBlack, board, board.game, configurationPanel, false);
+                playerPanel2 = new PlayerPanel(playerBlack, board, board.game, configurationPanel);
                 playerPanel2.setBackground(new Color(75,115,153));
                 playerPanel2.setVisible(true);
 
@@ -128,13 +128,10 @@ public class Game extends JPanel {
 
     public void switchTurn() {
         if(currentPlayer == playerWhite) {
-            playerWhite.stopTimer();
             currentPlayer = playerBlack;
         } else {
             currentPlayer = playerWhite;
-            playerBlack.stopTimer();
         }
-        currentPlayer.startTimer();
     }
 
     public void paintComponent(Graphics g) {
@@ -173,8 +170,8 @@ public class Game extends JPanel {
         this.remove(playerPanel2);
 
         // Reset the player panels
-        playerPanel = new PlayerPanel(playerWhite, board, this, configurationPanel, true);
-        playerPanel2 = new PlayerPanel(playerBlack, board, this, configurationPanel, false);
+        playerPanel = new PlayerPanel(playerWhite, board, this, configurationPanel);
+        playerPanel2 = new PlayerPanel(playerBlack, board, this, configurationPanel);
 
         // Add the new player panels
         this.add(playerPanel);
