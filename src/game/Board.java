@@ -73,26 +73,6 @@ public class Board {
         return null;
     }
 
-    public void makeMove(Move move) {
-        if(move.piece instanceof Pawn) {
-            pawnMove(move);
-        } else if (move.piece instanceof  King) {
-            kingMove(move);
-        } else {
-            move.piece.col = move.postCol;
-            move.piece.row = move.postRow;
-            move.piece.x = move.postCol * Square.SQUARE_SIZE;
-            move.piece.y = move.postRow * Square.SQUARE_SIZE;
-
-            move.piece.isFirstMove = false;
-
-            capture(move.capture);
-            game.switchTurn();
-        }
-        updateGameState();
-        game.cancelDrawRequest();
-    }
-
     private void updateGameState() {
         Piece king = findKing(game.currentPlayer.isWhite());
         if(check.isGameOver(king)) {
@@ -199,6 +179,26 @@ public class Board {
         return count == 1 || (count == 2 && hasBishopOrKnight);
     }
 
+    public void makeMove(Move move) {
+        if(move.piece instanceof Pawn) {
+            pawnMove(move);
+        } else if (move.piece instanceof  King) {
+            kingMove(move);
+        } else {
+            move.piece.col = move.postCol;
+            move.piece.row = move.postRow;
+            move.piece.x = move.postCol * Square.SQUARE_SIZE;
+            move.piece.y = move.postRow * Square.SQUARE_SIZE;
+
+            move.piece.isFirstMove = false;
+
+            capture(move.capture);
+            game.switchTurn();
+        }
+        updateGameState();
+        game.cancelDrawRequest();
+    }
+
     private void kingMove(Move move) {
         if(Math.abs(move.piece.col - move.postCol) >= 2) {
             Piece rook, king;
@@ -223,6 +223,7 @@ public class Board {
             move.piece.y = move.postRow * Square.SQUARE_SIZE;
             capture(move.capture);
         }
+        move.piece.isFirstMove = false;
         game.switchTurn();
     }
 
@@ -272,7 +273,7 @@ public class Board {
         pieces.remove(piece);
     }
 
-    public  boolean isValidMove(Move move) {
+    public boolean isValidMove(Move move) {
         if((!move.piece.isWhite() && game.currentPlayer == game.playerWhite) || (move.piece.isWhite() && game.currentPlayer == game.playerBlack))
             return false;
         if(sameTeam(move.piece, move.capture) && !isCastlingMove(move.piece, move.capture))
