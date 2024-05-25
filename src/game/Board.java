@@ -228,13 +228,13 @@ public class Board {
     }
 
     public void pawnMove(Move move) {
-        int colorIndex = move.piece.isWhite() ? 1 : -1;
+        int direction = move.piece.isWhite() ? 1 : -1;
 
         if(getTileNum(move.postCol, move.postRow) == enPassantTarget) {
-            move.capture = getPiece(move.postCol, move.postRow + colorIndex);
+            move.capture = getPiece(move.postCol, move.postRow + direction);
         }
         if(Math.abs(move.piece.row -move.postRow) == 2) {
-            enPassantTarget = getTileNum(move.postCol, move.postRow + colorIndex);
+            enPassantTarget = getTileNum(move.postCol, move.postRow + direction);
         } else {
             enPassantTarget = -1;
         }

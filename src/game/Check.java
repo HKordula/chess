@@ -99,9 +99,9 @@ public class Check {
     }
 
     private boolean pawnChecked(int col, int row, Piece king, int kingCol, int kingRow) {
-        int colorVal = king.isWhite() ? -1 : 1;
-        return  checkPawn(board.getPiece(kingCol + 1, kingRow + colorVal), king,  col, row) ||
-                checkPawn(board.getPiece(kingCol - 1, kingRow + colorVal), king,  col, row);
+        int direction = king.isWhite() ? -1 : 1;
+        return  checkPawn(board.getPiece(kingCol + 1, kingRow + direction), king,  col, row) ||
+                checkPawn(board.getPiece(kingCol - 1, kingRow + direction), king,  col, row);
     }
 
     private boolean checkPawn(Piece p, Piece k, int col, int row) {

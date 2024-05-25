@@ -18,46 +18,54 @@ public class Queen extends Piece{
     }
 
     public boolean moveCollision(int col, int row) {
-        if ((col == this.col || row ==this.row)) {
+        if ((col == this.col || row == this.row)) {
+            // UP
             if (this.col > col)
                 for (int c = this.col - 1; c > col; c--)
                     if (board.getPiece(c, this.row) != null)
                         return true;
-
+            // DOWN
             if (this.col < col)
                 for (int c = this.col + 1; c < col; c++)
                     if (board.getPiece(c, this.row) != null)
                         return true;
-
+            // LEFT
             if (this.row > row)
                 for (int r = this.row - 1; r > row; r--)
                     if (board.getPiece(this.col, r) != null)
                         return true;
-
+            // RIGHT
             if (this.row < row)
                 for (int r = this.row + 1; r < row; r++)
                     if (board.getPiece(this.col, r) != null)
                         return true;
         } else {
-            if (this.col > col && this.row > row)
-                for (int i = 1 ; i < Math.abs(this.col - col); i++)
-                    if (board.getPiece(this.col - i, this.row - i) != null)
-                        return true;
-
-            if (this.col < col && this.row > row)
-                for (int i = 1 ; i < Math.abs(this.col - col); i++)
-                    if (board.getPiece(this.col + i, this.row - i) != null)
-                        return true;
-
-            if (this.col > col && this.row < row)
-                for (int i = 1 ; i < Math.abs(this.col - col); i++)
-                    if (board.getPiece(this.col - i, this.row + i) != null)
-                        return true;
-
-            if (this.col < col && this.row < row)
-                for (int i = 1 ; i < Math.abs(this.col - col); i++)
-                    if (board.getPiece(this.col + i, this.row + i) != null)
-                        return true;
+            // LEFT
+            if(this.col > col) {
+                // UP
+                if (this.row > row)
+                    for (int i = 1 ; i < Math.abs(this.col - col); i++)
+                        if (board.getPiece(this.col - i, this.row - i) != null)
+                            return true;
+                // DOWN
+                if (this.row < row)
+                    for (int i = 1 ; i < Math.abs(this.col - col); i++)
+                        if (board.getPiece(this.col - i, this.row + i) != null)
+                            return true;
+            }
+            // RIGHT
+            if(this.col < col) {
+                // UP
+                if (this.row > row)
+                    for (int i = 1 ; i < Math.abs(this.col - col); i++)
+                        if (board.getPiece(this.col + i, this.row - i) != null)
+                            return true;
+                // DOWN
+                if (this.row < row)
+                    for (int i = 1 ; i < Math.abs(this.col - col); i++)
+                        if (board.getPiece(this.col + i, this.row + i) != null)
+                            return true;
+            }
         }
         return false;
     }

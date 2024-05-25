@@ -5,6 +5,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class PlayerPanel extends JPanel {
     private final Player player;
@@ -20,7 +21,7 @@ public class PlayerPanel extends JPanel {
 
         setLayout(null);
 
-        ImageIcon playerImage = new ImageIcon(getClass().getResource(player.getColor().equals("White") ? "/images/Light/Pawn.png" : "/images/Dark/Pawn.png"));
+        ImageIcon playerImage = new ImageIcon(Objects.requireNonNull(getClass().getResource(player.getColor().equals("White") ? "/images/Light/Pawn.png" : "/images/Dark/Pawn.png")));
         JLabel imageLabel = new JLabel(playerImage);
         imageLabel.setBounds(30, 0, 100, 100);
 
